@@ -4,9 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^3.5.0",
     "apollo-server": "^3.5.0",
     "graphql": "^16.0.1",
-    "graphql-import-files": "^1.0.17"
+    "graphql-import-files": "^1.0.17",
+    "prisma": "^3.5.0",
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
@@ -21,6 +24,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
+    "git-commit-msg-linter": "^3.2.8",
     "husky": "^7.0.4",
     "lint-staged": "^12.0.3",
     "prettier": "^2.4.1",
@@ -38,6 +42,11 @@
   },
   "lint-staged": {
     "*.js": [
+      "yarn eslint:fix",
+      "yarn prettify",
+      "git add ."
+    ],
+    "*.ts": [
       "yarn eslint:fix",
       "yarn prettify",
       "git add ."
