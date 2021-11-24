@@ -12,7 +12,7 @@
     "graphql-scalars": "^1.13.6",
     "prisma": "^3.5.0",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.0.0",
+    "type-graphql": "1.2.0-rc.1",
     "typegraphql-prisma": "^0.17.0"
   },
   "devDependencies": {
@@ -42,6 +42,7 @@
     "eslint:fix": "eslint ./src --ext .js,.ts --fix",
     "prettify": "prettier --write src/**/*.{js,json,ts} && prettier --write *.{js,json,ts}",
     "prisma:generate": "npx prisma generate",
+    "prisma:format": "npx prisma format",
     "prisma:init": "npx prisma init",
     "start:development:linux": "NODE_ENV=development ts-node ./src/app.ts",
     "start:development:windows": "SET NODE_ENV=development && ts-node ./src/app.ts"

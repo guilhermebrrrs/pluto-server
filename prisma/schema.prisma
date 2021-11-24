@@ -94,13 +94,13 @@ model CollectionPoint {
 
 model CollectionRequest {
   id                                      String                      @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  acceptedByOrganizationUser              OrganizationUser?           @relation(fields: [acceptedByOrganizationUserId], references: [id])
+  acceptedByOrganizationUser              OrganizationUser?           @relation("acceptedCollectionRequests", fields: [acceptedByOrganizationUserId], references: [id])
   acceptedByOrganizationUserId            String?
   canceledOrCompletedByUser               User?                       @relation("canceledOrCompletedByUser", fields: [canceledOrCompletedByUserId], references: [id])
   canceledOrCompletedByUserId             String?
   canceledOrCompletedByOrganizationUser   OrganizationUser?           @relation("canceledOrCompletedByOrganizationUser", fields: [canceledOrCompletedByOrganizationUserId], references: [id])
   canceledOrCompletedByOrganizationUserId String?
-  createdByUser                           User                        @relation(fields: [createdByUserId], references: [id])
+  createdByUser                           User                        @relation("createdRequests", fields: [createdByUserId], references: [id])
   createdByUserId                         String
   createdAt                               DateTime                    @default(now())
   collectionPoint                         CollectionPoint?
@@ -129,7 +129,8 @@ model CollectionRequestMaterial {
 
 model OrganizationUser {
   id                            String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  collectionRequests            CollectionRequest[]
+  acceptedCollectionRequests    CollectionRequest[] @relation("acceptedCollectionRequests")
+  collectionRequest             CollectionRequest[] @relation("canceledOrCompletedByOrganizationUser")
   createdAt                     DateTime            @default(now())
   email                         String
   isActive                      Boolean
@@ -139,41 +140,41 @@ model OrganizationUser {
   password                      String
   responsibleForCollectionPaths CollectionPath[]
   updatedAt                     DateTime            @updatedAt
-  CollectionRequest             CollectionRequest[] @relation("canceledOrCompletedByOrganizationUser")
 
   @@unique([email, organizationId, password])
 }
 
 model Organization {
-  id                String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  cpfCnpj           String
-  createdAt         DateTime            @default(now())
-  email             String              @unique
-  isActive          Boolean
-  name              String
-  organizationType  String
-  password          String
-  users             OrganizationUser[]
-  updatedAt         DateTime            @updatedAt
-  CollectionRequest CollectionRequest[]
-}
-
-model User {
   id                 String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
   collectionRequests CollectionRequest[]
+  cpfCnpj            String
   createdAt          DateTime            @default(now())
   email              String              @unique
   isActive           Boolean
-  locations          UserLocation[]
   name               String
+  organizationType   String
   password           String
+  users              OrganizationUser[]
   updatedAt          DateTime            @updatedAt
-  CollectionRequest  CollectionRequest[] @relation("canceledOrCompletedByUser")
+}
+
+model User {
+  id                         String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  canceledCollectionRequests CollectionRequest[] @relation("canceledOrCompletedByUser")
+  createdCollectionRequests  CollectionRequest[] @relation("createdRequests")
+  createdAt                  DateTime            @default(now())
+  email                      String              @unique
+  isActive                   Boolean
+  locations                  UserLocation[]
+  name                       String
+  password                   String
+  updatedAt                  DateTime            @updatedAt
 }
 
 model UserLocation {
   id                String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
   address           Address?
+  collectionRequest CollectionRequest[]
   createdAt         DateTime            @default(now())
   latitude          Float
   longitude         Float
@@ -181,7 +182,6 @@ model UserLocation {
   updatedAt         DateTime            @updatedAt
   user              User                @relation(fields: [userId], references: [id])
   userId            String
-  CollectionRequest CollectionRequest[]
 
   @@unique([placename, userId])
 }
