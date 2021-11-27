@@ -13,7 +13,6 @@ generator client {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
-  output   = "../src/graphql"
 }
 
 enum CollectionStatus {
@@ -38,6 +37,12 @@ enum MaterialType {
   WOODS
 }
 
+enum OrganizationType {
+  CATADOR
+  COOPERATIVA
+  EMPRESA_PRIVADA
+}
+
 enum WeekDays {
   SUNDAY
   MONDAY
@@ -52,10 +57,10 @@ model Address {
   id             String       @id @default(dbgenerated()) @map("_id") @db.ObjectId
   cep            String
   city           String
-  complement     String
+  complement     String?
   country        String
   createdAt      DateTime     @default(now())
-  number         String
+  number         String?
   state          String
   street         String
   updatedAt      DateTime     @updatedAt
@@ -64,17 +69,17 @@ model Address {
 }
 
 model CollectionPath {
-  id                              String            @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  collectionPoints                CollectionPoint[]
-  collectionPathResponsibleUser   OrganizationUser  @relation(fields: [collectionPathResponsibleUserId], references: [id])
-  collectionPathResponsibleUserId String
-  collectionPathStatus            CollectionStatus
-  createdAt                       DateTime          @default(now())
-  description                     String
-  estimatedTime                   Int
-  name                            String
-  totalEstimatedDistance          Float
-  updatedAt                       DateTime          @updatedAt
+  id                                          String            @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  collectionPoints                            CollectionPoint[]
+  collectionPathResponsibleOrganizationUser   OrganizationUser? @relation(fields: [collectionPathResponsibleOrganizationUserId], references: [id])
+  collectionPathResponsibleOrganizationUserId String?
+  collectionPathStatus                        CollectionStatus  @default(NOT_STARTED)
+  createdAt                                   DateTime          @default(now())
+  description                                 String
+  estimatedTime                               Int
+  name                                        String
+  totalEstimatedDistance                      Float
+  updatedAt                                   DateTime          @updatedAt
 }
 
 model CollectionPoint {
@@ -105,12 +110,12 @@ model CollectionRequest {
   createdAt                               DateTime                    @default(now())
   collectionPoint                         CollectionPoint?
   collectionRequestMaterials              CollectionRequestMaterial[]
-  collectionStatus                        CollectionStatus
+  collectionStatus                        CollectionStatus            @default(NOT_STARTED)
   details                                 String
   location                                UserLocation                @relation(fields: [locationId], references: [id])
   locationId                              String
-  organization                            Organization                @relation(fields: [organizationId], references: [id])
-  organizationId                          String
+  organization                            Organization?               @relation(fields: [organizationId], references: [id])
+  organizationId                          String?
   updatedAt                               DateTime                    @updatedAt
 }
 
@@ -120,7 +125,7 @@ model CollectionRequestMaterial {
   collectionRequest   CollectionRequest @relation(fields: [collectionRequestId], references: [id])
   collectionRequestId String
   createdAt           DateTime          @default(now())
-  description         String
+  description         String?
   materialType        MaterialType
   updatedAt           DateTime          @updatedAt
 
@@ -130,7 +135,7 @@ model CollectionRequestMaterial {
 model OrganizationUser {
   id                            String              @id @default(dbgenerated()) @map("_id") @db.ObjectId
   acceptedCollectionRequests    CollectionRequest[] @relation("acceptedCollectionRequests")
-  collectionRequest             CollectionRequest[] @relation("canceledOrCompletedByOrganizationUser")
+  canceledCollectionRequests    CollectionRequest[] @relation("canceledOrCompletedByOrganizationUser")
   createdAt                     DateTime            @default(now())
   email                         String
   isActive                      Boolean

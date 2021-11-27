@@ -1,17 +1,15 @@
 import "reflect-metadata";
-import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server";
 import { loadEnvironmentVariables } from "./utils";
 import { MainService } from "./services";
-import { resolvers } from "graphql";
 
 const init = async () => {
   loadEnvironmentVariables();
   MainService.initMainService();
 
-  const schema = await buildSchema({ resolvers: resolvers, validate: false });
   const apolloServer = new ApolloServer({
-    schema: schema,
+    typeDefs: Typedefs,
+    resolvers: Resolvers,
     context: MainService.getMainService().getPrismaClient(),
   });
 
