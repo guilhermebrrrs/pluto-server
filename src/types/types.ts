@@ -2,7 +2,7 @@ import { CollectionStatus, MaterialType, OrganizationType } from "./enums";
 
 interface Address extends DateMetadata {
   id: string;
-  cep: string;
+  cep?: string;
   city: string;
   complement?: string;
   country: string;
@@ -25,9 +25,9 @@ interface CollectionPath extends DateMetadata {
   collectionPathResponsibleOrganizationUser?: OrganizationUser;
   collectionPathStatus: CollectionStatus;
   description?: string;
-  estimatedTime: number;
+  estimatedTime?: number;
   name: string;
-  totalEstimatedDistance: number;
+  totalEstimatedDistance?: number;
 }
 
 interface CollectionPoint extends DateMetadata {
@@ -45,7 +45,7 @@ interface CollectionRequest extends DateMetadata {
   canceledOrCompletedByOrganizationUser?: OrganizationUser;
   createdByUser: User;
   collectionPoint?: CollectionPoint;
-  collectedRequestMaterials?: CollectionRequestMaterial[];
+  collectedRequestMaterials: CollectionRequestMaterial[];
   collectionStatus: CollectionStatus;
   details?: string;
   locations: UserLocation;
@@ -54,7 +54,7 @@ interface CollectionRequest extends DateMetadata {
 
 interface CollectionRequestMaterial extends DateMetadata {
   id: string;
-  amount: number;
+  amount?: number;
   collectionRequest: CollectionRequest;
   description?: string;
   materialType: MaterialType;
@@ -65,20 +65,20 @@ interface DateMetadata {
   updatedAt: Date;
 }
 
-interface OrganizationUser extends BaseUser {
-  id: string;
-  acceptedCollectionRequests: CollectionRequest[];
-  canceledCollectionRequests: CollectionRequest[];
-  organization: Organization;
-  responsibleForCollectionPaths: CollectionPath[];
-}
-
 interface Organization extends BaseUser {
   id: string;
   collectionRequests: CollectionRequest[];
   cpfCnpj: string;
   organizationType: OrganizationType;
   users: OrganizationUser[];
+}
+
+interface OrganizationUser extends BaseUser {
+  id: string;
+  acceptedCollectionRequests: CollectionRequest[];
+  canceledCollectionRequests: CollectionRequest[];
+  organization: Organization;
+  responsibleForCollectionPaths: CollectionPath[];
 }
 
 interface User extends BaseUser {
@@ -92,8 +92,8 @@ interface UserLocation extends DateMetadata {
   id: string;
   address?: Address;
   collectionRequests: CollectionRequest[];
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   placename: string;
   user: User;
 }

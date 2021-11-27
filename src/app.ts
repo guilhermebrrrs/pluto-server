@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { ApolloServer } from "apollo-server";
 import { loadEnvironmentVariables } from "./utils";
 import { MainService } from "./services";
+import { Resolvers, Typedefs } from "./graphql";
 
 const init = async () => {
   loadEnvironmentVariables();
@@ -10,7 +11,6 @@ const init = async () => {
   const apolloServer = new ApolloServer({
     typeDefs: Typedefs,
     resolvers: Resolvers,
-    context: MainService.getMainService().getPrismaClient(),
   });
 
   apolloServer
