@@ -1,101 +1,102 @@
 import { CollectionStatus, MaterialType, OrganizationType } from "./enums";
+import { ObjectId } from "mongodb";
 
 interface Address extends DateMetadata {
-  id: string;
+  _id?: ObjectId;
   cep?: string;
-  city: string;
+  city?: string;
   complement?: string;
-  country: string;
-  number: string;
-  state: string;
-  street: string;
-  userLocation: UserLocation;
+  country?: string;
+  number?: string;
+  state?: string;
+  street?: string;
+  userLocation?: UserLocation;
 }
 
 interface BaseUser extends DateMetadata {
-  email: string;
-  isActive: boolean;
-  name: string;
-  password: string;
+  email?: string;
+  isActive?: boolean;
+  name?: string;
+  password?: string;
 }
 
 interface CollectionPath extends DateMetadata {
-  id: string;
-  collectionPoints: CollectionPoint[];
+  _id?: ObjectId;
+  collectionPoints?: CollectionPoint[];
   collectionPathResponsibleOrganizationUser?: OrganizationUser;
-  collectionPathStatus: CollectionStatus;
+  collectionPathStatus?: CollectionStatus;
   description?: string;
   estimatedTime?: number;
-  name: string;
+  name?: string;
   totalEstimatedDistance?: number;
 }
 
 interface CollectionPoint extends DateMetadata {
-  id: string;
-  collectionPath: CollectionPath;
-  collectionRequest: CollectionRequest;
+  _id?: ObjectId;
+  collectionPath?: CollectionPath;
+  collectionRequest?: CollectionRequest;
   destination?: CollectionPoint;
   origin?: CollectionPoint;
 }
 
 interface CollectionRequest extends DateMetadata {
-  id: string;
+  _id?: ObjectId;
   acceptedByOrganizationUser?: OrganizationUser;
   canceledOrCompletedByUser?: User;
   canceledOrCompletedByOrganizationUser?: OrganizationUser;
-  createdByUser: User;
+  createdByUser?: User;
   collectionPoint?: CollectionPoint;
-  collectedRequestMaterials: CollectionRequestMaterial[];
-  collectionStatus: CollectionStatus;
+  collectedRequestMaterials?: CollectionRequestMaterial[];
+  collectionStatus?: CollectionStatus;
   details?: string;
-  locations: UserLocation;
+  locations?: UserLocation;
   organization?: Organization;
 }
 
 interface CollectionRequestMaterial extends DateMetadata {
-  id: string;
+  _id?: ObjectId;
   amount?: number;
-  collectionRequest: CollectionRequest;
+  collectionRequest?: CollectionRequest;
   description?: string;
-  materialType: MaterialType;
+  materialType?: MaterialType;
 }
 
 interface DateMetadata {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface Organization extends BaseUser {
-  id: string;
-  collectionRequests: CollectionRequest[];
-  cpfCnpj: string;
-  organizationType: OrganizationType;
-  users: OrganizationUser[];
+  _id?: ObjectId;
+  collectionRequests?: CollectionRequest[];
+  cpfCnpj?: string;
+  organizationType?: OrganizationType;
+  users?: OrganizationUser[];
 }
 
 interface OrganizationUser extends BaseUser {
-  id: string;
-  acceptedCollectionRequests: CollectionRequest[];
-  canceledCollectionRequests: CollectionRequest[];
-  organization: Organization;
-  responsibleForCollectionPaths: CollectionPath[];
+  _id?: ObjectId;
+  acceptedCollectionRequests?: CollectionRequest[];
+  canceledCollectionRequests?: CollectionRequest[];
+  organization?: Organization;
+  responsibleForCollectionPaths?: CollectionPath[];
 }
 
 interface User extends BaseUser {
-  id: string;
-  canceledCollectionRequests: CollectionRequest[];
-  createdCollectionRequests: CollectionRequest[];
-  locations: UserLocation[];
+  _id?: ObjectId;
+  canceledCollectionRequests?: CollectionRequest[];
+  createdCollectionRequests?: CollectionRequest[];
+  locations?: UserLocation[];
 }
 
 interface UserLocation extends DateMetadata {
-  id: string;
+  _id?: ObjectId;
   address?: Address;
-  collectionRequests: CollectionRequest[];
+  collectionRequests?: CollectionRequest[];
   latitude?: number;
   longitude?: number;
-  placename: string;
-  user: User;
+  placename?: string;
+  user?: User;
 }
 
 export type {

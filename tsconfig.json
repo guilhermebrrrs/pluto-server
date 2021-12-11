@@ -15,6 +15,6 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "skipLibCheck": true,
-    "target": "es5"
+    "target": "es2017"
   }
 }

@@ -39,130 +39,149 @@ export default gql`
     SATURDAY
   }
 
+  input AuthenticateUserInput {
+    email: String!
+    password: String!
+  }
+
+  input CreateUserInput {
+    email: String!
+    name: String!
+    password: String!
+  }
+
+  input FindUserByIdInput {
+    _id: String!
+  }
+
+  input UpdateUserPasswordInput {
+    _id: String!
+    newPassword: String!
+  }
+
   type Address {
-    id: String!
+    _id: String
     cep: String
-    city: String!
+    city: String
     complement: String
-    createdAt: String!
-    number: String!
-    state: String!
-    street: String!
-    userLocation: UserLocation!
-    updatedAt: String!
+    createdAt: String
+    number: String
+    state: String
+    street: String
+    userLocation: UserLocation
+    updatedAt: String
   }
 
   type CollectionPath {
-    id: String!
+    _id: String
     collectionPoints: [CollectionPoint]
     collectionPathResponsibleOrganizationUser: OrganizationUser
-    collectionPathStatus: CollectionStatus!
-    createdAt: String!
+    collectionPathStatus: CollectionStatus
+    createdAt: String
     description: String
     estimatedTime: Int
-    name: String!
+    name: String
     totalEstimatedDistance: Float
-    updatedAt: String!
+    updatedAt: String
   }
 
   type CollectionPoint {
-    id: String!
-    collectionPath: CollectionPath!
-    collectionRequest: CollectionRequest!
-    createdAt: String!
+    _id: String
+    collectionPath: CollectionPath
+    collectionRequest: CollectionRequest
+    createdAt: String
     destination: CollectionPoint
     origin: CollectionPoint
-    updatedAt: String!
+    updatedAt: String
   }
 
   type CollectionRequest {
-    id: String!
+    _id: String
     acceptedByOrganizationUser: OrganizationUser
     canceledOrCompletedByUser: User
     canceledOrCompletedByOrganizationUser: OrganizationUser
-    createdAt: String!
-    createdByUser: User!
+    createdAt: String
+    createdByUser: User
     collectionPoint: CollectionPoint
     collectedRequestMaterials: [CollectionRequestMaterial]
-    collectionStatus: CollectionStatus!
+    collectionStatus: CollectionStatus
     details: String
-    locations: UserLocation!
+    locations: UserLocation
     organization: Organization
-    updatedAt: String!
+    updatedAt: String
   }
 
   type CollectionRequestMaterial {
-    id: String!
+    _id: String
     amount: Float
-    collectionRequest: CollectionRequest!
-    createAt: String!
+    collectionRequest: CollectionRequest
+    createAt: String
     description: String
-    materialType: MaterialType!
-    updatedAt: String!
+    materialType: MaterialType
+    updatedAt: String
   }
 
   type Mutation {
-    createuser: String!
+    createUser(createUserInput: CreateUserInput): String
+    updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
 
   type Organization {
-    id: String!
+    _id: String
     collectionRequests: [CollectionRequest]
-    createdAt: String!
-    cpfCnpj: String!
-    email: String!
-    isActive: Boolean!
-    name: String!
-    organizationType: OrganizationType!
-    password: String!
-    updatedAt: String!
+    createdAt: String
+    cpfCnpj: String
+    email: String
+    isActive: Boolean
+    name: String
+    organizationType: OrganizationType
+    password: String
+    updatedAt: String
     users: [OrganizationUser]
   }
 
   type OrganizationUser {
-    id: String!
+    _id: String
     acceptedCollectionRequests: [CollectionRequest]
     canceledCollectionRequests: [CollectionRequest]
-    email: String!
-    createdAt: String!
-    isActive: Boolean!
-    name: String!
-    organization: Organization!
-    password: String!
+    email: String
+    createdAt: String
+    isActive: Boolean
+    name: String
+    organization: Organization
+    password: String
     responsibleForCollectionPaths: [CollectionPath]
-    updatedAt: String!
+    updatedAt: String
   }
 
   type Query {
-    getUserName: String!
+    authenticateUser(authenticateUserInput: AuthenticateUserInput): Boolean
+    findAllUsers: [User]
+    findUserById(findUserByIdInput: FindUserByIdInput): User
   }
 
   type User {
-    id: String!
+    _id: String
     canceledCollectionRequests: [CollectionRequest]
-    createdAt: String!
+    createdAt: String
     createdCollectionRequests: [CollectionRequest]
-    email: String!
-    isActive: Boolean!
+    email: String
+    isActive: Boolean
     locations: [UserLocation]
-    name: String!
-    password: String!
-    updatedAt: String!
+    name: String
+    password: String
+    updatedAt: String
   }
 
   type UserLocation {
-    id: String!
+    _id: String
     address: Address
-    createdAt: String!
+    createdAt: String
     collectionRequests: [CollectionRequest]
     latitude: Float
     longitude: Float
-    placename: String!
-    updatedAt: String!
-    user: User!
-  }
-
-  type TestType {
-    name: String!
+    placename: String
+    updatedAt: String
+    user: User
   }
 `;

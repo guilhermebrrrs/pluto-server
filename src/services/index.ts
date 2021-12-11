@@ -1,1 +1,1 @@
-export * from "./MainService";
+export { MongoDBService } from "./MongoDBService";

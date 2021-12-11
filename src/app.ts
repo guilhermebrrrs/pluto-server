@@ -1,15 +1,15 @@
 import { ApolloServer } from "apollo-server";
 import { loadEnvironmentVariables } from "./utils";
-import { MainService } from "./services";
-import { Resolvers, Typedefs } from "./graphql";
+import { generateResolvers, Typedefs } from "./graphql";
+import { MongoDBService } from "./services";
 
 const init = async () => {
   loadEnvironmentVariables();
-  MainService.initMainService();
+  await MongoDBService.getInstance();
 
   const apolloServer = new ApolloServer({
     typeDefs: Typedefs,
-    resolvers: Resolvers,
+    resolvers: await generateResolvers(),
   });
 
   apolloServer

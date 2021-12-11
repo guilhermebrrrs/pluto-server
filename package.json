@@ -12,6 +12,7 @@
     "@babel/core": "^7.16.0",
     "@babel/node": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
+    "@types/mongodb": "^4.0.7",
     "@types/node": "^16.11.9",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
@@ -23,6 +24,7 @@
     "git-commit-msg-linter": "^3.2.8",
     "husky": "^7.0.4",
     "lint-staged": "^12.0.3",
+    "nodemon": "^2.0.15",
     "prettier": "^2.4.1",
     "ts-node": "^10.4.0",
     "ts-node-dev": "^1.1.8",
@@ -33,7 +35,7 @@
     "eslint:fix": "eslint ./src --ext .js,.ts --fix",
     "prettify": "prettier --write src/**/*.{js,json,ts} && prettier --write *.{js,json,ts}",
     "start:development:linux": "NODE_ENV=development ts-node ./src/app.ts",
-    "start:development:windows": "SET NODE_ENV=development && ts-node ./src/app.ts"
+    "start:development:windows": "SET NODE_ENV=development && nodemon ./src/app.ts"
   },
   "husky": {
     "hooks": {

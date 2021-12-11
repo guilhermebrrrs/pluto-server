@@ -1,2 +1,2 @@
+export { default as generateResolvers } from "./resolvers";
 export { default as Typedefs } from "./types";
-export { default as Resolvers } from "./resolvers";
