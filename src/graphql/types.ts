@@ -41,7 +41,8 @@ export default gql`
 
   input AuthenticateUserInput {
     email: String!
-    password: String!
+    oldPassword: String!
+    newPassword: String!
   }
 
   input CreateUserInput {
@@ -51,8 +52,9 @@ export default gql`
   }
 
   input UpdateUserPasswordInput {
-    _id: ID
+    email: String!
     newPassword: String!
+    oldPassword: String!
   }
 
   type Address {
@@ -160,7 +162,7 @@ export default gql`
   }
 
   type Query {
-    authenticateUser(authenticateUserInput: AuthenticateUserInput): Boolean
+    authenticateUser(authenticateUserInput: AuthenticateUserInput): User
     findAllUsers: [User]
     findUserById(id: ID!): User
   }

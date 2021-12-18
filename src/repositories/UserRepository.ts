@@ -5,15 +5,12 @@ import {
   User,
 } from "../types";
 import { UserSchema } from "../schemas";
+import { ObjectId } from "mongodb";
 
 class UserRepository {
-  public static async authenticateUser(
-    authenticateUserInput: AuthenticateUserInput
-  ) {
+  public static async authenticateUser(input: AuthenticateUserInput) {
     try {
-      const user = await UserSchema.find({ ...authenticateUserInput });
-
-      return user ?? false;
+      return await UserSchema.findOne(input);
     } catch (err) {
       console.error(err.message);
     }
@@ -21,7 +18,7 @@ class UserRepository {
 
   public static async create(input: CreateUserInput) {
     try {
-      await UserSchema.create({ ...input });
+      await UserSchema.create({ ...input, _id: new ObjectId() });
     } catch (err) {
       console.error(err.message);
     }
@@ -60,11 +57,20 @@ class UserRepository {
   }
 
   public static async updatePassword({
-    _id,
+    email,
     newPassword,
+    oldPassword,
   }: UpdateUserPasswordInput) {
+    console.log(email, newPassword, oldPassword);
+
     try {
-      UserSchema.findOneAndUpdate({ _id }, { password: newPassword });
+      await UserSchema.findOneAndUpdate(
+        {
+          email: email,
+          password: oldPassword,
+        },
+        { password: newPassword }
+      );
     } catch (err) {
       console.error(err.message);
     }

@@ -103,8 +103,9 @@ interface OrganizationUserLoginKey {
 }
 
 interface UpdateUserPasswordInput {
-  _id: string;
+  email: string;
   newPassword: string;
+  oldPassword: string;
 }
 
 interface User extends BaseUser {
