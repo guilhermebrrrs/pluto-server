@@ -50,17 +50,13 @@ export default gql`
     password: String!
   }
 
-  input FindUserByIdInput {
-    _id: String!
-  }
-
   input UpdateUserPasswordInput {
-    _id: String!
+    _id: ID
     newPassword: String!
   }
 
   type Address {
-    _id: String
+    _id: ID
     cep: String
     city: String
     complement: String
@@ -73,7 +69,7 @@ export default gql`
   }
 
   type CollectionPath {
-    _id: String
+    _id: ID
     collectionPoints: [CollectionPoint]
     collectionPathResponsibleOrganizationUser: OrganizationUser
     collectionPathStatus: CollectionStatus
@@ -86,7 +82,7 @@ export default gql`
   }
 
   type CollectionPoint {
-    _id: String
+    _id: ID
     collectionPath: CollectionPath
     collectionRequest: CollectionRequest
     createdAt: String
@@ -96,7 +92,7 @@ export default gql`
   }
 
   type CollectionRequest {
-    _id: String
+    _id: ID
     acceptedByOrganizationUser: OrganizationUser
     canceledOrCompletedByUser: User
     canceledOrCompletedByOrganizationUser: OrganizationUser
@@ -112,7 +108,7 @@ export default gql`
   }
 
   type CollectionRequestMaterial {
-    _id: String
+    _id: ID
     amount: Float
     collectionRequest: CollectionRequest
     createAt: String
@@ -127,7 +123,7 @@ export default gql`
   }
 
   type Organization {
-    _id: String
+    _id: ID
     collectionRequests: [CollectionRequest]
     createdAt: String
     cpfCnpj: String
@@ -141,7 +137,7 @@ export default gql`
   }
 
   type OrganizationUser {
-    _id: String
+    _id: ID
     acceptedCollectionRequests: [CollectionRequest]
     canceledCollectionRequests: [CollectionRequest]
     email: String
@@ -154,14 +150,23 @@ export default gql`
     updatedAt: String
   }
 
+  type OrganizationUserLoginKey {
+    _id: ID
+    organization: Organization
+    email: String
+    isActive: Boolean
+    password: String
+    organizationUser: OrganizationUser
+  }
+
   type Query {
     authenticateUser(authenticateUserInput: AuthenticateUserInput): Boolean
     findAllUsers: [User]
-    findUserById(findUserByIdInput: FindUserByIdInput): User
+    findUserById(id: ID!): User
   }
 
   type User {
-    _id: String
+    _id: ID
     canceledCollectionRequests: [CollectionRequest]
     createdAt: String
     createdCollectionRequests: [CollectionRequest]
@@ -174,7 +179,7 @@ export default gql`
   }
 
   type UserLocation {
-    _id: String
+    _id: ID
     address: Address
     createdAt: String
     collectionRequests: [CollectionRequest]

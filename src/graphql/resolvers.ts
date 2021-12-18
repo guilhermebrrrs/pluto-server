@@ -1,23 +1,27 @@
+import {
+  AuthenticateUserInput,
+  CreateUserInput,
+  UpdateUserPasswordInput,
+} from "../types";
 import { UserRepository } from "../repositories";
 
 const generateResolvers = async () => {
-  const userRepository = await UserRepository.getInstance();
-
   return {
     Mutation: {
-      createUser: async (_: any, { createUserInput }: any) =>
-        await userRepository.create(createUserInput),
-      updateUserPassword: async (_: any, { updateUserPasswordInput }: any) =>
-        await userRepository.updatePassword(updateUserPasswordInput),
+      createUser: async (_: any, createUserInput: CreateUserInput) =>
+        await UserRepository.create(createUserInput),
+      updateUserPassword: async (
+        _: any,
+        updateUserPasswordInput: UpdateUserPasswordInput
+      ) => await UserRepository.updatePassword(updateUserPasswordInput),
     },
     Query: {
       authenticateUser: async (
         _: any,
-        { authenticateUserInput: { email, password } }: any
-      ) => await userRepository.authenticateUser(email, password),
-      findUserById: async (_: any, { id }: any) =>
-        await userRepository.findById(id),
-      findAllUsers: async () => await userRepository.findAll(),
+        authenticateUserInput: AuthenticateUserInput
+      ) => await UserRepository.authenticateUser(authenticateUserInput),
+      findUserById: async () => "Oi",
+      findAllUsers: async () => await UserRepository.findAll(),
     },
   };
 };

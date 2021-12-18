@@ -1,110 +1,70 @@
-import { Document, ObjectId, WithId } from "mongodb";
-import { MongoDBService } from "../services";
-import { User } from "../types";
+import {
+  AuthenticateUserInput,
+  CreateUserInput,
+  UpdateUserPasswordInput,
+  User,
+} from "../types";
+import { UserSchema } from "../schemas";
 
 class UserRepository {
-  private static readonly collectionName = "user";
-  private static instance: UserRepository;
-
-  private constructor() {}
-
-  async authenticateUser(email: string, password: string) {
+  public static async authenticateUser(
+    authenticateUserInput: AuthenticateUserInput
+  ) {
     try {
-      const db = await MongoDBService.getInstance();
+      const user = await UserSchema.find({ ...authenticateUserInput });
 
-      const user = await db.collection(UserRepository.collectionName).findOne({
-        email,
-        password,
-      });
-      console.log("in auth", user);
-
-      return !!user ?? false;
+      return user ?? false;
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  async create(obj: User) {
+  public static async create(input: CreateUserInput) {
     try {
-      const db = await MongoDBService.getInstance();
-
-      await db.collection(UserRepository.collectionName).insertOne(obj);
+      await UserSchema.create({ ...input });
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  async delete(id: string) {
+  public static async delete(id: string) {
     try {
-      const db = await MongoDBService.getInstance();
-
-      await db
-        .collection(UserRepository.collectionName)
-        .deleteOne({ _id: new ObjectId(id) });
+      await UserSchema.deleteOne({ _id: id });
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  public static async getInstance(): Promise<UserRepository> {
-    if (!UserRepository.instance)
-      UserRepository.instance = new UserRepository();
-
-    return UserRepository.instance;
-  }
-
-  async findAll(): Promise<WithId<Document>[]> {
+  public static async findAll() {
     try {
-      const db = await MongoDBService.getInstance();
-
-      return await await db
-        .collection(UserRepository.collectionName)
-        .find({})
-        .toArray();
+      return await UserSchema.find();
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  async findById(id: string) {
+  public static async findById(id: string) {
     try {
-      const db = await MongoDBService.getInstance();
-
-      return await await db.collection(UserRepository.collectionName).findOne({
-        _id: new ObjectId(id),
-      });
+      return UserSchema.findOne({ _id: id });
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  async update(obj: User) {
-    obj.updatedAt = new Date();
-
+  public static async update(obj: User) {
     try {
-      const db = await MongoDBService.getInstance();
-
-      await db
-        .collection(UserRepository.collectionName)
-        .findOneAndUpdate({ id: new ObjectId(obj?._id) }, obj);
+      await UserSchema.findOneAndUpdate({ _id: obj?._id }, obj);
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  async updatePassword({ id, newPassword }: any) {
+  public static async updatePassword({
+    _id,
+    newPassword,
+  }: UpdateUserPasswordInput) {
     try {
-      const db = await MongoDBService.getInstance();
-
-      await db.collection(UserRepository.collectionName).findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        {
-          $set: {
-            password: newPassword,
-            updatedAt: new Date(),
-          },
-        }
-      );
+      UserSchema.findOneAndUpdate({ _id }, { password: newPassword });
     } catch (err) {
       console.error(err.message);
     }

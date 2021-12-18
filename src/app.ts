@@ -5,7 +5,7 @@ import { MongoDBService } from "./services";
 
 const init = async () => {
   loadEnvironmentVariables();
-  await MongoDBService.getInstance();
+  await MongoDBService.connect();
 
   const apolloServer = new ApolloServer({
     typeDefs: Typedefs,

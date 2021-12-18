@@ -13,6 +13,11 @@ interface Address extends DateMetadata {
   userLocation?: UserLocation;
 }
 
+interface AuthenticateUserInput {
+  email: string;
+  password: string;
+}
+
 interface BaseUser extends DateMetadata {
   email?: string;
   isActive?: boolean;
@@ -26,7 +31,7 @@ interface CollectionPath extends DateMetadata {
   collectionPathResponsibleOrganizationUser?: OrganizationUser;
   collectionPathStatus?: CollectionStatus;
   description?: string;
-  estimatedTime?: number;
+  estimatedTimeInMinutes?: number;
   name?: string;
   totalEstimatedDistance?: number;
 }
@@ -41,15 +46,14 @@ interface CollectionPoint extends DateMetadata {
 
 interface CollectionRequest extends DateMetadata {
   _id?: ObjectId;
-  acceptedByOrganizationUser?: OrganizationUser;
-  canceledOrCompletedByUser?: User;
-  canceledOrCompletedByOrganizationUser?: OrganizationUser;
-  createdByUser?: User;
+  acceptedBy?: OrganizationUser;
+  canceledOrCompletedBy?: OrganizationUser | User;
+  createdBy?: User;
   collectionPoint?: CollectionPoint;
   collectedRequestMaterials?: CollectionRequestMaterial[];
   collectionStatus?: CollectionStatus;
   details?: string;
-  locations?: UserLocation;
+  location?: UserLocation;
   organization?: Organization;
 }
 
@@ -59,6 +63,12 @@ interface CollectionRequestMaterial extends DateMetadata {
   collectionRequest?: CollectionRequest;
   description?: string;
   materialType?: MaterialType;
+}
+
+interface CreateUserInput {
+  email: string;
+  name: string;
+  password: string;
 }
 
 interface DateMetadata {
@@ -74,18 +84,32 @@ interface Organization extends BaseUser {
   users?: OrganizationUser[];
 }
 
-interface OrganizationUser extends BaseUser {
+interface OrganizationUser
+  extends Omit<BaseUser, "email" & "isActive" & "password"> {
   _id?: ObjectId;
-  acceptedCollectionRequests?: CollectionRequest[];
-  canceledCollectionRequests?: CollectionRequest[];
+  collectionRequests: CollectionRequest[];
   organization?: Organization;
   responsibleForCollectionPaths?: CollectionPath[];
+  userLoginKeys?: OrganizationUserLoginKey[];
+}
+
+interface OrganizationUserLoginKey {
+  _id: ObjectId;
+  organization?: Organization;
+  email?: string;
+  isActive?: boolean;
+  password?: string;
+  organizationUser: OrganizationUser;
+}
+
+interface UpdateUserPasswordInput {
+  _id: string;
+  newPassword: string;
 }
 
 interface User extends BaseUser {
   _id?: ObjectId;
-  canceledCollectionRequests?: CollectionRequest[];
-  createdCollectionRequests?: CollectionRequest[];
+  collectionRequests?: CollectionRequest[];
   locations?: UserLocation[];
 }
 
@@ -101,12 +125,16 @@ interface UserLocation extends DateMetadata {
 
 export type {
   Address,
+  AuthenticateUserInput,
   CollectionPath,
   CollectionPoint,
   CollectionRequest,
   CollectionRequestMaterial,
+  CreateUserInput,
   Organization,
   OrganizationUser,
+  OrganizationUserLoginKey,
+  UpdateUserPasswordInput,
   User,
   UserLocation,
 };

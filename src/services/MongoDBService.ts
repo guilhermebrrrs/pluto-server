@@ -1,26 +1,34 @@
-import { Db, MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 class MongoDBService {
-  private static instance: MongoClient;
+  public static async connect(): Promise<void> {
+    const { connect } = mongoose;
+    if (!connect) {
+      console.error("connect doesn't exists");
+      return;
+    }
 
-  constructor() {}
-
-  public static async getInstance(): Promise<Db> {
-    if (!this.instance) await MongoDBService.connect();
-
-    return this.instance?.db(process.env["DATABASE_NAME"]);
-  }
-
-  private static async connect(): Promise<void> {
-    if (!MongoDBService.instance) {
-      const client = new MongoClient(process.env["DATABASE_URL"]);
-      client.connect((err, result) => {
-        if (err) console.log("err", err);
-        if (result) {
-          console.log(`Application has been connect to MongoAtlas`);
-          MongoDBService.instance = client;
-        }
-      });
+    connect &&
+      (await connect(process.env["DATABASE_URL"], {
+        dbName: process.env["DATABASE_NAME"],
+      }));
+    const status = mongoose.connection.readyState;
+    switch (status) {
+      case 0:
+        console.log("Disconnected from MongoAtlas");
+        break;
+      case 1:
+        console.log("MongoAtlas Connected");
+        break;
+      case 2:
+        console.log("Connecting to MongoAtlas...");
+        break;
+      case 3:
+        console.log("Disconnecting from MongoAtlas...");
+        break;
+      default:
+        console.log("No connection Status");
+        break;
     }
   }
 }
