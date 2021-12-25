@@ -8,7 +8,7 @@ import { UserSchema } from "../schemas";
 import { ObjectId } from "mongodb";
 
 class UserRepository {
-  public static async authenticateUser(input: AuthenticateUserInput) {
+  public static async authenticate(input: AuthenticateUserInput) {
     try {
       return await UserSchema.findOne(input);
     } catch (err) {

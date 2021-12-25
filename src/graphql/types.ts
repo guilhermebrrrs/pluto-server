@@ -41,8 +41,7 @@ export default gql`
 
   input AuthenticateUserInput {
     email: String!
-    oldPassword: String!
-    newPassword: String!
+    password: String!
   }
 
   input CreateUserInput {
@@ -62,6 +61,7 @@ export default gql`
     cep: String
     city: String
     complement: String
+    country: String
     createdAt: String
     number: String
     state: String
@@ -77,7 +77,7 @@ export default gql`
     collectionPathStatus: CollectionStatus
     createdAt: String
     description: String
-    estimatedTime: Int
+    estimatedTimeInMinutes: Int
     name: String
     totalEstimatedDistance: Float
     updatedAt: String
@@ -95,11 +95,10 @@ export default gql`
 
   type CollectionRequest {
     _id: ID
-    acceptedByOrganizationUser: OrganizationUser
-    canceledOrCompletedByUser: User
-    canceledOrCompletedByOrganizationUser: OrganizationUser
+    acceptedBy: OrganizationUser
+    canceledOrCompletedBy: OrganizationUser
     createdAt: String
-    createdByUser: User
+    createdBy: User
     collectionPoint: CollectionPoint
     collectedRequestMaterials: [CollectionRequestMaterial]
     collectionStatus: CollectionStatus
@@ -140,8 +139,7 @@ export default gql`
 
   type OrganizationUser {
     _id: ID
-    acceptedCollectionRequests: [CollectionRequest]
-    canceledCollectionRequests: [CollectionRequest]
+    collectionRequests: [CollectionRequest]
     email: String
     createdAt: String
     isActive: Boolean
@@ -169,9 +167,8 @@ export default gql`
 
   type User {
     _id: ID
-    canceledCollectionRequests: [CollectionRequest]
+    collectionRequests: [CollectionRequest]
     createdAt: String
-    createdCollectionRequests: [CollectionRequest]
     email: String
     isActive: Boolean
     locations: [UserLocation]

@@ -10,7 +10,7 @@ const generateResolvers = async () => {
     },
     Query: {
       authenticateUser: async (_: any, { authenticateUserInput }: any) =>
-        await UserRepository.authenticateUser(authenticateUserInput),
+        await UserRepository.authenticate(authenticateUserInput),
       findUserById: async (_: any, { id }: any) =>
         await UserRepository.findById(id),
       findAllUsers: async () => await UserRepository.findAll(),
