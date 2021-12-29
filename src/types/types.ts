@@ -71,6 +71,14 @@ interface CreateUserInput {
   password: string;
 }
 
+interface CreateOrganizationInput {
+  email: string;
+  cpfCnpj?: string;
+  name: string;
+  password: string;
+  organizationType: OrganizationType;
+}
+
 interface DateMetadata {
   createdAt?: Date;
   updatedAt?: Date;
@@ -132,6 +140,7 @@ export type {
   CollectionRequest,
   CollectionRequestMaterial,
   CreateUserInput,
+  CreateOrganizationInput,
   Organization,
   OrganizationUser,
   OrganizationUserLoginKey,

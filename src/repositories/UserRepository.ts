@@ -18,7 +18,7 @@ class UserRepository {
 
   public static async create(input: CreateUserInput) {
     try {
-      await UserSchema.create({ ...input, _id: new ObjectId() });
+      return !!(await UserSchema.create({ ...input, _id: new ObjectId() }));
     } catch (err) {
       console.error(err.message);
     }

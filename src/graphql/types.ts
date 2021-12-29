@@ -50,6 +50,14 @@ export default gql`
     password: String!
   }
 
+  input CreateOrganizationInput {
+    email: String!
+    cpfCnpj: String
+    name: String!
+    password: String!
+    organizationType: OrganizationType!
+  }
+
   input UpdateUserPasswordInput {
     email: String!
     newPassword: String!
@@ -119,7 +127,7 @@ export default gql`
   }
 
   type Mutation {
-    createUser(createUserInput: CreateUserInput): String
+    createUser(createUserInput: CreateUserInput): Boolean
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
 
