@@ -84,6 +84,14 @@ interface DateMetadata {
   updatedAt?: Date;
 }
 
+interface OrganizationRegistrationValidation {
+  cpfCnpjAlreadyExists: boolean;
+  emailAlreadyExists: boolean;
+  organizationNameAlreadyExists: boolean;
+  passwordConstraintDoesntMatch: boolean;
+  registrationSucceeded: boolean;
+}
+
 interface Organization extends BaseUser {
   _id?: ObjectId;
   collectionRequests?: CollectionRequest[];
@@ -142,6 +150,7 @@ export type {
   CreateUserInput,
   CreateOrganizationInput,
   Organization,
+  OrganizationRegistrationValidation,
   OrganizationUser,
   OrganizationUserLoginKey,
   UpdateUserPasswordInput,

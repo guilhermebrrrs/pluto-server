@@ -127,6 +127,9 @@ export default gql`
   }
 
   type Mutation {
+    createOrganization(
+      createOrganizationInput: CreateOrganizationInput
+    ): OrganizationRegistrationValidation
     createUser(createUserInput: CreateUserInput): Boolean
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
@@ -143,6 +146,14 @@ export default gql`
     password: String
     updatedAt: String
     users: [OrganizationUser]
+  }
+
+  type OrganizationRegistrationValidation {
+    cpfCnpjAlreadyExists: Boolean
+    emailAlreadyExists: Boolean
+    organizationNameAlreadyExists: Boolean
+    passwordConstraintDoesntMatch: Boolean
+    registrationSucceeded: Boolean
   }
 
   type OrganizationUser {
@@ -169,6 +180,7 @@ export default gql`
 
   type Query {
     authenticateUser(authenticateUserInput: AuthenticateUserInput): User
+    findAllOrganizations: [Organization]
     findAllUsers: [User]
     findUserById(id: ID!): User
   }
