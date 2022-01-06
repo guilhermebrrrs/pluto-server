@@ -9,23 +9,23 @@ const OrganizationUserLoginKeySchema: Model<OrganizationUserLoginKey> = model(
       organization: {
         ref: "Organization",
         type: Schema.Types.ObjectId,
-        email: {
-          required: true,
-          type: String,
-        },
-        isActive: {
-          default: false,
-          required: true,
-          type: Boolean,
-        },
-        password: {
-          required: true,
-          type: String,
-        },
-        organizationUser: {
-          ref: "OrganizationUser",
-          type: Schema.Types.ObjectId,
-        },
+      },
+      email: {
+        required: true,
+        type: String,
+      },
+      isActive: {
+        default: false,
+        required: true,
+        type: Boolean,
+      },
+      password: {
+        required: true,
+        type: String,
+      },
+      organizationUser: {
+        ref: "OrganizationUser",
+        type: Schema.Types.ObjectId,
       },
     },
     {

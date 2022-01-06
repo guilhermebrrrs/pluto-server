@@ -39,14 +39,19 @@ export default gql`
     SATURDAY
   }
 
-  input AuthenticateUserInput {
-    email: String!
+  input AuthenticateOrganizationInput {
+    organizationEmail: String!
     password: String!
   }
 
-  input CreateUserInput {
+  input AuthenticateOrganizationUserInput {
     email: String!
-    name: String!
+    organizationEmail: String!
+    password: String!
+  }
+
+  input AuthenticateUserInput {
+    email: String!
     password: String!
   }
 
@@ -56,6 +61,19 @@ export default gql`
     name: String!
     password: String!
     organizationType: OrganizationType!
+  }
+
+  input CreateOrganizationUserInput {
+    email: String!
+    username: String!
+    organizationEmail: String!
+    password: String!
+  }
+
+  input CreateUserInput {
+    email: String!
+    name: String!
+    password: String!
   }
 
   input UpdateUserPasswordInput {
@@ -130,6 +148,9 @@ export default gql`
     createOrganization(
       createOrganizationInput: CreateOrganizationInput
     ): OrganizationRegistrationValidation
+    createOrganizationUser(
+      createOrganizationUserInput: CreateOrganizationUserInput
+    ): OrganizationUserRegistrationValidation
     createUser(createUserInput: CreateUserInput): Boolean
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
@@ -156,17 +177,25 @@ export default gql`
     registrationSucceeded: Boolean
   }
 
+  type OrganizationUserRegistrationValidation {
+    emailAlreadyExists: Boolean
+    emailAndOrganizationAlreadyExists: Boolean
+    noOrganizationFound: Boolean
+    organizationNameAlreadyExists: Boolean
+    organizationWithSameNameAlreadyExists: Boolean
+    passwordConstraintDoesntMatch: Boolean
+    registrationSucceeded: Boolean
+  }
+
   type OrganizationUser {
     _id: ID
     collectionRequests: [CollectionRequest]
-    email: String
     createdAt: String
-    isActive: Boolean
     name: String
     organization: Organization
-    password: String
     responsibleForCollectionPaths: [CollectionPath]
     updatedAt: String
+    userLoginKeys: [OrganizationUserLoginKey]
   }
 
   type OrganizationUserLoginKey {
@@ -180,7 +209,14 @@ export default gql`
 
   type Query {
     authenticateUser(authenticateUserInput: AuthenticateUserInput): User
+    authenticateOrganization(
+      authenticateOrganizationInput: AuthenticateOrganizationInput
+    ): Organization
+    authenticateOrganizationUser(
+      authenticateOrganizationUserInput: AuthenticateOrganizationUserInput
+    ): OrganizationUser
     findAllOrganizations: [Organization]
+    findAllOrganizationUsers: [OrganizationUser]
     findAllUsers: [User]
     findUserById(id: ID!): User
   }

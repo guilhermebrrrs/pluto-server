@@ -1,24 +1,63 @@
-import { OrganizationRepository, UserRepository } from "../repositories";
+import {
+  OrganizationRepository,
+  OrganizationUserRepository,
+  UserRepository,
+} from "../repositories";
+import {
+  AuthenticateOrganizationInput,
+  AuthenticateOrganizationUserInput,
+  AuthenticateUserInput,
+  CreateOrganizationInput,
+  CreateOrganizationUserInput,
+  CreateUserInput,
+  UpdateUserPasswordInput,
+} from "../types";
 
-const generateResolvers = async () => {
-  return {
-    Mutation: {
-      createOrganization: async (_: any, { createOrganizationInput }: any) =>
-        await OrganizationRepository.create(createOrganizationInput),
-      createUser: async (_: any, { createUserInput }: any) =>
-        await UserRepository.create(createUserInput),
-      updateUserPassword: async (_: any, { updateUserPasswordInput }: any) =>
-        await UserRepository.updatePassword(updateUserPasswordInput),
-    },
-    Query: {
-      authenticateUser: async (_: any, { authenticateUserInput }: any) =>
-        await UserRepository.authenticate(authenticateUserInput),
-      findUserById: async (_: any, { id }: any) =>
-        await UserRepository.findById(id),
-      findAllOrganizations: async () => await OrganizationRepository.findAll(),
-      findAllUsers: async () => await UserRepository.findAll(),
-    },
-  };
+export default {
+  Mutation: {
+    createOrganization: async (
+      _: any,
+      { createOrganizationInput = {} as CreateOrganizationInput }: any
+    ) => await OrganizationRepository.create(createOrganizationInput),
+    createOrganizationUser: async (
+      _: any,
+      { createOrganizationUserInput = {} as CreateOrganizationUserInput }: any
+    ) => await OrganizationUserRepository.create(createOrganizationUserInput),
+    createUser: async (
+      _: any,
+      { createUserInput = {} as CreateUserInput }: any
+    ) => await UserRepository.create(createUserInput),
+    updateUserPassword: async (
+      _: any,
+      { updateUserPasswordInput = {} as UpdateUserPasswordInput }: any
+    ) => await UserRepository.updatePassword(updateUserPasswordInput),
+  },
+  Query: {
+    authenticateOrganization: async (
+      _: any,
+      {
+        authenticateOrganizationInput = {} as AuthenticateOrganizationInput,
+      }: any
+    ) =>
+      await OrganizationRepository.authenticate(authenticateOrganizationInput),
+    authenticateOrganizationUser: async (
+      _: any,
+      {
+        authenticateOrganizationUserInput = {} as AuthenticateOrganizationUserInput,
+      }: any
+    ) =>
+      await OrganizationUserRepository.authenticate(
+        authenticateOrganizationUserInput
+      ),
+    authenticateUser: async (
+      _: any,
+      { authenticateUserInput = {} as AuthenticateUserInput }: any
+    ) => await UserRepository.authenticate(authenticateUserInput),
+    findUserById: async (_: any, { id }: any) =>
+      await UserRepository.findById(id),
+    findAllOrganizations: async () => await OrganizationRepository.findAll(),
+    findAllOrganizationUsers: async () =>
+      await OrganizationUserRepository.findAll(),
+    findAllUsers: async () => await UserRepository.findAll(),
+  },
 };
-
-export default generateResolvers;

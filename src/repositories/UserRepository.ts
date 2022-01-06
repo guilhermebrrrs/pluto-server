@@ -8,11 +8,13 @@ import { UserSchema } from "../schemas";
 import { ObjectId } from "mongodb";
 
 class UserRepository {
-  public static async authenticate(input: AuthenticateUserInput) {
+  public static async authenticate(
+    input: AuthenticateUserInput
+  ): Promise<User> {
     try {
       return await UserSchema.findOne(input);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -20,7 +22,7 @@ class UserRepository {
     try {
       return !!(await UserSchema.create({ ...input, _id: new ObjectId() }));
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -28,7 +30,7 @@ class UserRepository {
     try {
       await UserSchema.deleteOne({ _id: id });
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -36,7 +38,7 @@ class UserRepository {
     try {
       return await UserSchema.find();
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -44,7 +46,7 @@ class UserRepository {
     try {
       return UserSchema.findOne({ _id: id });
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -52,7 +54,7 @@ class UserRepository {
     try {
       await UserSchema.findOneAndUpdate({ _id: obj?._id }, obj);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
@@ -72,7 +74,7 @@ class UserRepository {
         { password: newPassword }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 }

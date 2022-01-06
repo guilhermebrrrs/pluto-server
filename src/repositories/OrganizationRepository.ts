@@ -1,12 +1,29 @@
 import { ObjectId } from "mongodb";
 import { OrganizationSchema } from "../schemas";
 import {
+  AuthenticateOrganizationInput,
   CreateOrganizationInput,
+  Organization,
   OrganizationRegistrationValidation,
 } from "../types";
 
 class OrganizationRepository {
-  public static async create(input: CreateOrganizationInput) {
+  public static async authenticate(
+    input: AuthenticateOrganizationInput
+  ): Promise<Organization> {
+    try {
+      return await OrganizationSchema.findOne({
+        email: input.organizationEmail,
+        password: input.password,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  public static async create(
+    input: CreateOrganizationInput
+  ): Promise<OrganizationRegistrationValidation> {
     try {
       const validationObj: OrganizationRegistrationValidation =
         {} as OrganizationRegistrationValidation;
@@ -29,7 +46,6 @@ class OrganizationRepository {
       ) {
         validationObj.registrationSucceeded = false;
 
-        console.log("validationObj", validationObj);
         return validationObj;
       }
 
@@ -38,18 +54,17 @@ class OrganizationRepository {
         _id: new ObjectId(),
       }));
 
-      console.log("validationObj", validationObj);
       return validationObj;
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 
-  public static async findAll() {
+  public static async findAll(): Promise<Organization[]> {
     try {
       return await OrganizationSchema.find();
     } catch (err) {
-      console.error(err.mesage);
+      console.error(err);
     }
   }
 }
