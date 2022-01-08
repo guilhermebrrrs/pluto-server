@@ -191,7 +191,9 @@ export default gql`
     _id: ID
     collectionRequests: [CollectionRequest]
     createdAt: String
+    email: String
     name: String
+    password: String
     organization: Organization
     responsibleForCollectionPaths: [CollectionPath]
     updatedAt: String
