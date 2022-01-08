@@ -12,6 +12,10 @@ const OrganizationUserSchema: Model<OrganizationUser> = model(
           type: Schema.Types.ObjectId,
         },
       ],
+      email: {
+        required: true,
+        type: String,
+      },
       isActive: {
         default: false,
         type: Boolean,
