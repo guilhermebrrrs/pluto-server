@@ -128,22 +128,11 @@ interface Organization extends BaseUser {
   users?: OrganizationUser[];
 }
 
-interface OrganizationUser
-  extends Omit<BaseUser, "email" | "isActive" | "password"> {
+interface OrganizationUser extends BaseUser {
   _id?: ObjectId;
   collectionRequests?: CollectionRequest[];
   organization?: Organization;
   responsibleForCollectionPaths?: CollectionPath[];
-  userLoginKeys?: OrganizationUserLoginKey[];
-}
-
-interface OrganizationUserLoginKey {
-  _id: ObjectId;
-  organization: Organization;
-  email: string;
-  isActive?: boolean;
-  password: string;
-  organizationUser: OrganizationUser;
 }
 
 interface UpdateUserPasswordInput {
@@ -184,7 +173,6 @@ export type {
   OrganizationRegistrationValidation,
   OrganizationUserRegistrationValidation,
   OrganizationUser,
-  OrganizationUserLoginKey,
   UpdateUserPasswordInput,
   User,
   UserLocation,

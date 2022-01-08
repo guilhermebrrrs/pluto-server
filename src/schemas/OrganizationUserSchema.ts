@@ -12,23 +12,25 @@ const OrganizationUserSchema: Model<OrganizationUser> = model(
           type: Schema.Types.ObjectId,
         },
       ],
-      name: {
-        required: true,
-        type: String,
+      isActive: {
+        default: false,
+        type: Boolean,
       },
       organization: {
         ref: "Organization",
         type: Schema.Types.ObjectId,
       },
+      name: {
+        required: true,
+        type: String,
+      },
+      password: {
+        required: true,
+        type: String,
+      },
       responsibleForCollectionPaths: [
         {
           ref: "CollectionPath",
-          type: Schema.Types.ObjectId,
-        },
-      ],
-      userLoginKeys: [
-        {
-          ref: "OrganizationUserLoginKey",
           type: Schema.Types.ObjectId,
         },
       ],

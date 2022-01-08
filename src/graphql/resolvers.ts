@@ -58,6 +58,8 @@ export default {
     findAllOrganizations: async () => await OrganizationRepository.findAll(),
     findAllOrganizationUsers: async () =>
       await OrganizationUserRepository.findAll(),
+    findAllOrganizationUsersByOrganizationId: async (_: any, { id }: any) =>
+      await OrganizationUserRepository.findAllByOrganizationId(id),
     findAllUsers: async () => await UserRepository.findAll(),
   },
 };

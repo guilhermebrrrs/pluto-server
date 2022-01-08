@@ -195,16 +195,6 @@ export default gql`
     organization: Organization
     responsibleForCollectionPaths: [CollectionPath]
     updatedAt: String
-    userLoginKeys: [OrganizationUserLoginKey]
-  }
-
-  type OrganizationUserLoginKey {
-    _id: ID
-    organization: Organization
-    email: String
-    isActive: Boolean
-    password: String
-    organizationUser: OrganizationUser
   }
 
   type Query {
@@ -217,6 +207,7 @@ export default gql`
     ): OrganizationUser
     findAllOrganizations: [Organization]
     findAllOrganizationUsers: [OrganizationUser]
+    findAllOrganizationUsersByOrganizationId(id: ID!): [OrganizationUser]
     findAllUsers: [User]
     findUserById(id: ID!): User
   }

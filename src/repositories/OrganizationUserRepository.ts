@@ -1,14 +1,10 @@
 import { ObjectId } from "mongodb";
-import {
-  OrganizationSchema,
-  OrganizationUserLoginKeySchema,
-  OrganizationUserSchema,
-} from "../schemas";
+import { OrganizationSchema, OrganizationUserSchema } from "../schemas";
 import {
   AuthenticateOrganizationUserInput,
   CreateOrganizationUserInput,
+  Organization,
   OrganizationUser,
-  OrganizationUserLoginKey,
   OrganizationUserRegistrationValidation,
 } from "../types";
 
@@ -17,34 +13,13 @@ class OrganizationUserRepository {
     input: AuthenticateOrganizationUserInput
   ): Promise<OrganizationUser> {
     try {
-      const organization = await OrganizationSchema.findOne({
+      const organization = (await OrganizationSchema.findOne({
         email: input.organizationEmail,
+      })) as Organization;
+
+      return await OrganizationUserSchema.findOne({
+        organization: organization,
       });
-
-      if (!organization) return null;
-
-      const organizationUserLoginKey =
-        await OrganizationUserLoginKeySchema.findOne({
-          organization,
-          email: input.email,
-          password: input.password,
-        });
-
-      if (!organizationUserLoginKey?.organizationUser) return null;
-
-      const user = await OrganizationUserSchema.findOne({
-        _id: organizationUserLoginKey?.organizationUser as unknown as string,
-      }).populate("organization");
-
-      if (user) {
-        user.userLoginKeys = [organizationUserLoginKey];
-
-        console.log(user);
-
-        return user;
-      }
-
-      return null;
     } catch (err) {
       console.error(err);
     }
@@ -80,48 +55,21 @@ class OrganizationUserRepository {
       }
 
       const organizationUser: OrganizationUser = {
-        name: input.username,
-        organization,
         _id: new ObjectId(),
-      };
-
-      const organizationUserLoginKey: OrganizationUserLoginKey = {
         email: input.email,
         organization,
-        organizationUser,
+        name: input.username,
         password: input.password,
-        _id: new ObjectId(),
       };
-
-      if (!organizationUser?.userLoginKeys) {
-        organizationUser.userLoginKeys = [] as OrganizationUserLoginKey[];
-      }
-
-      organizationUser?.userLoginKeys.push(organizationUserLoginKey);
 
       const wasOrganizationUserCreated = !!(await OrganizationUserSchema.create(
         organizationUser
       ));
 
-      const wasOrganizationUserLoginKeyCreated =
-        !!(await OrganizationUserLoginKeySchema.create(
-          organizationUserLoginKey
-        ));
-
-      if (wasOrganizationUserCreated && wasOrganizationUserLoginKeyCreated) {
+      if (wasOrganizationUserCreated) {
         validationObj.registrationSucceeded = true;
 
         return validationObj;
-      }
-
-      if (!wasOrganizationUserCreated) {
-        await OrganizationUserSchema.deleteOne({ _id: organizationUser._id });
-      }
-
-      if (!wasOrganizationUserLoginKeyCreated) {
-        await OrganizationUserLoginKeySchema.deleteOne({
-          _id: organizationUserLoginKey._id,
-        });
       }
 
       validationObj.registrationSucceeded = false;
@@ -137,6 +85,18 @@ class OrganizationUserRepository {
       return await OrganizationUserSchema.find();
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  public static async findAllByOrganizationId(id: string) {
+    try {
+      return await OrganizationUserSchema.find()
+        .where("organization")
+        .equals(id)
+        .populate("organization")
+        .exec();
+    } catch (err) {
+      console.error(err.message);
     }
   }
 }
