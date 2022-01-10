@@ -135,6 +135,18 @@ interface OrganizationUser extends BaseUser {
   responsibleForCollectionPaths?: CollectionPath[];
 }
 
+interface OrganizationUserPersonalDataInput {
+  email: string;
+  name: string;
+  isActive: boolean;
+  password: string;
+}
+
+interface UpdateOrganizationUserPersonalDataInput {
+  _id: string;
+  data: OrganizationUserPersonalDataInput;
+}
+
 interface UpdateUserPasswordInput {
   email: string;
   newPassword: string;
@@ -173,6 +185,8 @@ export type {
   OrganizationRegistrationValidation,
   OrganizationUserRegistrationValidation,
   OrganizationUser,
+  OrganizationUserPersonalDataInput,
+  UpdateOrganizationUserPersonalDataInput,
   UpdateUserPasswordInput,
   User,
   UserLocation,

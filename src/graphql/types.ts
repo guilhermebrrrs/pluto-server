@@ -76,6 +76,18 @@ export default gql`
     password: String!
   }
 
+  input OrganizationUserPersonalDataInput {
+    email: String!
+    name: String!
+    isActive: Boolean!
+    password: String!
+  }
+
+  input UpdateOrganizationUserPersonalDataInput {
+    _id: String!
+    data: OrganizationUserPersonalDataInput!
+  }
+
   input UpdateUserPasswordInput {
     email: String!
     newPassword: String!
@@ -148,10 +160,19 @@ export default gql`
     createOrganization(
       createOrganizationInput: CreateOrganizationInput
     ): OrganizationRegistrationValidation
+
     createOrganizationUser(
       createOrganizationUserInput: CreateOrganizationUserInput
     ): OrganizationUserRegistrationValidation
+
     createUser(createUserInput: CreateUserInput): Boolean
+
+    deleteOrganizationUserById(id: ID): String
+
+    updateOrganizationUserPersonalData(
+      updateOrganizationUserPersonalDataInput: UpdateOrganizationUserPersonalDataInput
+    ): String
+
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
 
@@ -192,6 +213,7 @@ export default gql`
     collectionRequests: [CollectionRequest]
     createdAt: String
     email: String
+    isActive: Boolean
     name: String
     password: String
     organization: Organization

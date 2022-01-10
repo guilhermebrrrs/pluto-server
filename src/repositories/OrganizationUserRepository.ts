@@ -6,6 +6,7 @@ import {
   Organization,
   OrganizationUser,
   OrganizationUserRegistrationValidation,
+  UpdateOrganizationUserPersonalDataInput,
 } from "../types";
 
 class OrganizationUserRepository {
@@ -80,6 +81,19 @@ class OrganizationUserRepository {
     }
   }
 
+  public static async updatePersonalData(
+    input: UpdateOrganizationUserPersonalDataInput
+  ) {
+    try {
+      await OrganizationUserSchema.findOneAndUpdate(
+        { _id: input._id },
+        { ...input.data }
+      );
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   public static async findAll(): Promise<OrganizationUser[]> {
     try {
       return await OrganizationUserSchema.find();
@@ -95,6 +109,14 @@ class OrganizationUserRepository {
         .equals(id)
         .populate("organization")
         .exec();
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  public static async deleteById(id: string) {
+    try {
+      await OrganizationUserSchema.deleteOne({ _id: id });
     } catch (err) {
       console.error(err.message);
     }

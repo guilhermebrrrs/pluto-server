@@ -10,6 +10,7 @@ import {
   CreateOrganizationInput,
   CreateOrganizationUserInput,
   CreateUserInput,
+  UpdateOrganizationUserPersonalDataInput,
   UpdateUserPasswordInput,
 } from "../types";
 
@@ -19,19 +20,36 @@ export default {
       _: any,
       { createOrganizationInput = {} as CreateOrganizationInput }: any
     ) => await OrganizationRepository.create(createOrganizationInput),
+
     createOrganizationUser: async (
       _: any,
       { createOrganizationUserInput = {} as CreateOrganizationUserInput }: any
     ) => await OrganizationUserRepository.create(createOrganizationUserInput),
+
     createUser: async (
       _: any,
       { createUserInput = {} as CreateUserInput }: any
     ) => await UserRepository.create(createUserInput),
+
+    deleteOrganizationUserById: async (_: any, { id = "" as string }: any) =>
+      await OrganizationUserRepository.deleteById(id),
+
+    updateOrganizationUserPersonalData: async (
+      _: any,
+      {
+        updateOrganizationUserPersonalDataInput = {} as UpdateOrganizationUserPersonalDataInput,
+      }: any
+    ) =>
+      await OrganizationUserRepository.updatePersonalData(
+        updateOrganizationUserPersonalDataInput
+      ),
+
     updateUserPassword: async (
       _: any,
       { updateUserPasswordInput = {} as UpdateUserPasswordInput }: any
     ) => await UserRepository.updatePassword(updateUserPasswordInput),
   },
+
   Query: {
     authenticateOrganization: async (
       _: any,
@@ -40,6 +58,7 @@ export default {
       }: any
     ) =>
       await OrganizationRepository.authenticate(authenticateOrganizationInput),
+
     authenticateOrganizationUser: async (
       _: any,
       {
@@ -49,17 +68,23 @@ export default {
       await OrganizationUserRepository.authenticate(
         authenticateOrganizationUserInput
       ),
+
     authenticateUser: async (
       _: any,
       { authenticateUserInput = {} as AuthenticateUserInput }: any
     ) => await UserRepository.authenticate(authenticateUserInput),
+
     findUserById: async (_: any, { id }: any) =>
       await UserRepository.findById(id),
+
     findAllOrganizations: async () => await OrganizationRepository.findAll(),
+
     findAllOrganizationUsers: async () =>
       await OrganizationUserRepository.findAll(),
+
     findAllOrganizationUsersByOrganizationId: async (_: any, { id }: any) =>
       await OrganizationUserRepository.findAllByOrganizationId(id),
+
     findAllUsers: async () => await UserRepository.findAll(),
   },
 };
