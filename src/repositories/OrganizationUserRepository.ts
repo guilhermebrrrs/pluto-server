@@ -85,10 +85,10 @@ class OrganizationUserRepository {
     input: UpdateOrganizationUserPersonalDataInput
   ) {
     try {
-      await OrganizationUserSchema.findOneAndUpdate(
+      return !!(await OrganizationUserSchema.findOneAndUpdate(
         { _id: input._id },
         { ...input.data }
-      );
+      ));
     } catch (err) {
       console.error(err.message);
     }
@@ -116,7 +116,7 @@ class OrganizationUserRepository {
 
   public static async deleteById(id: string) {
     try {
-      await OrganizationUserSchema.deleteOne({ _id: id });
+      return !!(await OrganizationUserSchema.deleteOne({ _id: id }));
     } catch (err) {
       console.error(err.message);
     }

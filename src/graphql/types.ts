@@ -167,11 +167,11 @@ export default gql`
 
     createUser(createUserInput: CreateUserInput): Boolean
 
-    deleteOrganizationUserById(id: ID): String
+    deleteOrganizationUserById(id: ID): Boolean
 
     updateOrganizationUserPersonalData(
       updateOrganizationUserPersonalDataInput: UpdateOrganizationUserPersonalDataInput
-    ): String
+    ): Boolean
 
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String
   }
@@ -223,16 +223,23 @@ export default gql`
 
   type Query {
     authenticateUser(authenticateUserInput: AuthenticateUserInput): User
+
     authenticateOrganization(
       authenticateOrganizationInput: AuthenticateOrganizationInput
     ): Organization
+
     authenticateOrganizationUser(
       authenticateOrganizationUserInput: AuthenticateOrganizationUserInput
     ): OrganizationUser
+
     findAllOrganizations: [Organization]
+
     findAllOrganizationUsers: [OrganizationUser]
+
     findAllOrganizationUsersByOrganizationId(id: ID!): [OrganizationUser]
+
     findAllUsers: [User]
+
     findUserById(id: ID!): User
   }
 
