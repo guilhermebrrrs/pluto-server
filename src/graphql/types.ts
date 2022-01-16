@@ -108,6 +108,17 @@ export default gql`
     updatedAt: String
   }
 
+  type AvailableDayAndTime {
+    day: WeekDays
+    maxTime: AvailableTime
+    minTime: AvailableTime
+  }
+
+  type AvailableTime {
+    hour: Int
+    minutes: Int
+  }
+
   type CollectionPath {
     _id: ID
     collectionPoints: [CollectionPoint]
@@ -258,6 +269,7 @@ export default gql`
   type UserLocation {
     _id: ID
     address: Address
+    availableDaysAndTimes: [AvailableDayAndTime]
     createdAt: String
     collectionRequests: [CollectionRequest]
     latitude: Float

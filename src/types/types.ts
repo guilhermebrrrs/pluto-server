@@ -1,4 +1,9 @@
-import { CollectionStatus, MaterialType, OrganizationType } from "./enums";
+import {
+  CollectionStatus,
+  MaterialType,
+  OrganizationType,
+  WeekDays,
+} from "./enums";
 import { ObjectId } from "mongodb";
 
 interface Address extends DateMetadata {
@@ -28,6 +33,17 @@ interface AuthenticateUserInput {
   email: string;
   password: string;
 }
+
+type AvailableDayAndTime = {
+  weekDay: WeekDays;
+  maxTime: AvailableTime;
+  minTime: AvailableTime;
+};
+
+type AvailableTime = {
+  hour: number;
+  minutes: number;
+};
 
 interface BaseUser extends DateMetadata {
   email: string;
@@ -174,6 +190,8 @@ export type {
   AuthenticateOrganizationInput,
   AuthenticateOrganizationUserInput,
   AuthenticateUserInput,
+  AvailableDayAndTime,
+  AvailableTime,
   CollectionPath,
   CollectionPoint,
   CollectionRequest,
