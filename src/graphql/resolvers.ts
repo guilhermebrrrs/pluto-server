@@ -1,6 +1,7 @@
 import {
   OrganizationRepository,
   OrganizationUserRepository,
+  UserLocationRepository,
   UserRepository,
 } from "../repositories";
 import {
@@ -10,6 +11,7 @@ import {
   CreateOrganizationInput,
   CreateOrganizationUserInput,
   CreateUserInput,
+  CreateUserLocationInput,
   UpdateOrganizationUserPersonalDataInput,
   UpdateUserPasswordInput,
 } from "../types";
@@ -30,6 +32,11 @@ export default {
       _: any,
       { createUserInput = {} as CreateUserInput }: any
     ) => await UserRepository.create(createUserInput),
+
+    createUserLocation: async (
+      _: any,
+      { createUserLocationInput = {} as CreateUserLocationInput }: any
+    ) => await UserLocationRepository.create(createUserLocationInput),
 
     deleteOrganizationUserById: async (_: any, { id = "" as string }: any) =>
       await OrganizationUserRepository.deleteById(id),
@@ -84,6 +91,9 @@ export default {
 
     findAllOrganizationUsersByOrganizationId: async (_: any, { id }: any) =>
       await OrganizationUserRepository.findAllByOrganizationId(id),
+
+    findAllUserLocationsByUserId: async (_: any, { id }: any) =>
+      await UserLocationRepository.findAllByUserId(id),
 
     findAllUsers: async () => await UserRepository.findAll(),
   },

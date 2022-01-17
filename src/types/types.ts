@@ -12,6 +12,7 @@ interface Address extends DateMetadata {
   city?: string;
   complement?: string;
   country?: string;
+  district?: string;
   number?: string;
   state?: string;
   street?: string;
@@ -34,16 +35,16 @@ interface AuthenticateUserInput {
   password: string;
 }
 
-type AvailableDayAndTime = {
+interface AvailableDayAndTime {
   weekDay: WeekDays;
   maxTime: AvailableTime;
   minTime: AvailableTime;
-};
+}
 
-type AvailableTime = {
+interface AvailableTime {
   hour: number;
   minutes: number;
-};
+}
 
 interface BaseUser extends DateMetadata {
   email: string;
@@ -103,6 +104,35 @@ interface CreateUserInput {
   email: string;
   name: string;
   password: string;
+}
+
+interface CreateUserLocationAddressInput {
+  cep: string;
+  city: string;
+  complement?: string;
+  country: string;
+  district: string;
+  number: string;
+  state: string;
+  street: string;
+}
+
+interface CreateUserLocationAvailableDaysAndTimesInput {
+  weekDay: WeekDays;
+  maxTime: CreateUserLocationAvailableTimeInput;
+  minTime: CreateUserLocationAvailableTimeInput;
+}
+
+interface CreateUserLocationAvailableTimeInput {
+  hour: number;
+  minutes: number;
+}
+
+interface CreateUserLocationInput {
+  userId: string;
+  address: CreateUserLocationAddressInput;
+  availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput];
+  placename: String;
 }
 
 interface CreateOrganizationInput {
@@ -178,6 +208,7 @@ interface User extends BaseUser {
 interface UserLocation extends DateMetadata {
   _id?: ObjectId;
   address?: Address;
+  availableDaysAndTimes: AvailableDayAndTime[];
   collectionRequests?: CollectionRequest[];
   latitude?: number;
   longitude?: number;
@@ -199,6 +230,10 @@ export type {
   CreateOrganizationInput,
   CreateOrganizationUserInput,
   CreateUserInput,
+  CreateUserLocationAddressInput,
+  CreateUserLocationAvailableDaysAndTimesInput,
+  CreateUserLocationAvailableTimeInput,
+  CreateUserLocationInput,
   Organization,
   OrganizationRegistrationValidation,
   OrganizationUserRegistrationValidation,

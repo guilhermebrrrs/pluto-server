@@ -16,6 +16,10 @@ const AddressSchema: Model<Address> = model(
         required: true,
         type: String,
       },
+      district: {
+        required: true,
+        type: String,
+      },
       number: {
         required: true,
         type: String,

@@ -10,12 +10,26 @@ const UserLocationSchema: Model<UserLocation> = model(
         type: Schema.Types.ObjectId,
         ref: "Address",
       },
-      //@ts-ignore
       availableDaysAndTimes: [
         {
-          weekDay: String,
-          maxDate: { type: { hour: Number, minutes: Number } },
-          minDate: { type: { hour: Number, minutes: Number } },
+          weekDay: {
+            type: String,
+            required: true,
+          },
+          maxTime: {
+            type: {
+              hour: Number,
+              minutes: Number,
+            },
+            required: true,
+          },
+          minTime: {
+            type: {
+              hour: Number,
+              minutes: Number,
+            },
+            required: true,
+          },
         },
       ],
       collectionRequests: [

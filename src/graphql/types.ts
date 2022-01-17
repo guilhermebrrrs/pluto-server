@@ -76,6 +76,35 @@ export default gql`
     password: String!
   }
 
+  input CreateUserLocationAddressInput {
+    cep: String!
+    city: String!
+    complement: String
+    country: String!
+    district: String!
+    number: String!
+    state: String!
+    street: String!
+  }
+
+  input CreateUserLocationAvailableDaysAndTimesInput {
+    weekDay: WeekDays!
+    maxTime: CreateUserLocationAvailableTimeInput!
+    minTime: CreateUserLocationAvailableTimeInput!
+  }
+
+  input CreateUserLocationAvailableTimeInput {
+    hour: Int!
+    minutes: Int!
+  }
+
+  input CreateUserLocationInput {
+    userId: ID!
+    address: CreateUserLocationAddressInput!
+    availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput]!
+    placename: String!
+  }
+
   input OrganizationUserPersonalDataInput {
     email: String!
     name: String!
@@ -101,6 +130,7 @@ export default gql`
     complement: String
     country: String
     createdAt: String
+    district: String
     number: String
     state: String
     street: String
@@ -176,6 +206,10 @@ export default gql`
       createOrganizationUserInput: CreateOrganizationUserInput
     ): OrganizationUserRegistrationValidation
 
+    createUserLocation(
+      createUserLocationInput: CreateUserLocationInput
+    ): Boolean
+
     createUser(createUserInput: CreateUserInput): Boolean
 
     deleteOrganizationUserById(id: ID): Boolean
@@ -209,16 +243,6 @@ export default gql`
     registrationSucceeded: Boolean
   }
 
-  type OrganizationUserRegistrationValidation {
-    emailAlreadyExists: Boolean
-    emailAndOrganizationAlreadyExists: Boolean
-    noOrganizationFound: Boolean
-    organizationNameAlreadyExists: Boolean
-    organizationWithSameNameAlreadyExists: Boolean
-    passwordConstraintDoesntMatch: Boolean
-    registrationSucceeded: Boolean
-  }
-
   type OrganizationUser {
     _id: ID
     collectionRequests: [CollectionRequest]
@@ -230,6 +254,16 @@ export default gql`
     organization: Organization
     responsibleForCollectionPaths: [CollectionPath]
     updatedAt: String
+  }
+
+  type OrganizationUserRegistrationValidation {
+    emailAlreadyExists: Boolean
+    emailAndOrganizationAlreadyExists: Boolean
+    noOrganizationFound: Boolean
+    organizationNameAlreadyExists: Boolean
+    organizationWithSameNameAlreadyExists: Boolean
+    passwordConstraintDoesntMatch: Boolean
+    registrationSucceeded: Boolean
   }
 
   type Query {
@@ -248,6 +282,8 @@ export default gql`
     findAllOrganizationUsers: [OrganizationUser]
 
     findAllOrganizationUsersByOrganizationId(id: ID!): [OrganizationUser]
+
+    findAllUserLocationsByUserId(id: ID!): [UserLocation]
 
     findAllUsers: [User]
 
