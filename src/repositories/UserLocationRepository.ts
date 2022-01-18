@@ -5,35 +5,34 @@ import { ObjectId } from "mongodb";
 class UserLocationRepository {
   public static async create(input: CreateUserLocationInput) {
     try {
-      console.log(input.availableDaysAndTimes);
+      console.log(input);
 
       const user: User = await UserSchema.findById(input.userId);
 
-      const userLocation: UserLocation = await UserLocationSchema.create({
+      const userLocation = await UserLocationSchema.create({
         _id: new ObjectId(),
         user,
         availableDaysAndTimes: input.availableDaysAndTimes,
         placename: input.placename,
       });
 
-      const address: Address = await AddressSchema.create({
+      const address = await AddressSchema.create({
         _id: new ObjectId(),
         ...input.address,
       });
 
       if (address && userLocation) {
-        const userLocationAfterUpdate: UserLocation =
-          await UserLocationSchema.findByIdAndUpdate(userLocation._id, {
-            address,
-          });
-        const addressAfterUpdate: Address =
-          await AddressSchema.findByIdAndUpdate(address._id, { userLocation });
+        userLocation.address = address;
+        address.userLocation = userLocation;
 
-        return !!userLocationAfterUpdate && !!addressAfterUpdate;
+        await userLocation.save();
+        await address.save();
+
+        return !!(userLocation && address);
       }
 
-      await UserLocationSchema.findOneAndDelete(userLocation._id);
-      await AddressSchema.findOneAndDelete(address._id);
+      await userLocation?.delete();
+      await address?.delete();
 
       return false;
     } catch (err) {
@@ -45,7 +44,17 @@ class UserLocationRepository {
     try {
       const user: User = await UserSchema.findById(id);
 
-      return !!user ? await UserLocationSchema.find().where({ user }) : null;
+      //TODO: fix problem: day of week isn't returning
+      return !!user
+        ? await UserLocationSchema.find()
+            .where({ user })
+            .populate("address")
+            .populate({
+              path: "availableDaysAndTimes",
+              populate: { path: "day", model: "UserLocation" },
+            })
+            .exec()
+        : [];
     } catch (err) {
       console.error(err.message);
     }
