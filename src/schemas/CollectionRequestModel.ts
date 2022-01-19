@@ -1,7 +1,7 @@
 import { Model, model, Schema } from "mongoose";
 import { CollectionRequest } from "../types";
 
-const CollectionRequestSchema: Model<CollectionRequest> = model(
+const CollectionRequestModel: Model<CollectionRequest> = model(
   "CollectionRequest",
   new Schema(
     {
@@ -27,7 +27,7 @@ const CollectionRequestSchema: Model<CollectionRequest> = model(
         ref: "CollectionPoint",
         type: Schema.Types.ObjectId,
       },
-      collectedRequestMaterials: [String],
+      collectionRequestMaterials: [String],
       collectionStatus: String,
       details: String,
       location: {
@@ -47,4 +47,4 @@ const CollectionRequestSchema: Model<CollectionRequest> = model(
   "collection_requests"
 );
 
-export default CollectionRequestSchema;
+export default CollectionRequestModel;

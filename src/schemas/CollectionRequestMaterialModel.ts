@@ -1,7 +1,7 @@
 import { model, Model, Schema } from "mongoose";
 import { CollectionRequestMaterial } from "../types";
 
-const CollectionRequestMaterialSchema: Model<CollectionRequestMaterial> = model(
+const CollectionRequestMaterialModel: Model<CollectionRequestMaterial> = model(
   "CollectionRequestMaterial",
   new Schema(
     {
@@ -21,4 +21,4 @@ const CollectionRequestMaterialSchema: Model<CollectionRequestMaterial> = model(
   "collection_request_materials"
 );
 
-export default CollectionRequestMaterialSchema;
+export default CollectionRequestMaterialModel;

@@ -78,7 +78,7 @@ interface CollectionRequest extends DateMetadata {
   canceledOrCompletedBy?: OrganizationUser | User;
   createdBy?: User;
   collectionPoint?: CollectionPoint;
-  collectedRequestMaterials?: CollectionRequestMaterial[];
+  collectionRequestMaterials?: CollectionRequestMaterial[];
   collectionStatus?: CollectionStatus;
   details?: string;
   location?: UserLocation;

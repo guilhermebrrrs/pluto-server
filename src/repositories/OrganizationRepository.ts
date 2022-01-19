@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { OrganizationSchema } from "../schemas";
+import { OrganizationModel } from "../schemas";
 import {
   AuthenticateOrganizationInput,
   CreateOrganizationInput,
@@ -12,7 +12,7 @@ class OrganizationRepository {
     input: AuthenticateOrganizationInput
   ): Promise<Organization> {
     try {
-      return await OrganizationSchema.findOne({
+      return await OrganizationModel.findOne({
         email: input.organizationEmail,
         password: input.password,
       });
@@ -28,14 +28,14 @@ class OrganizationRepository {
       const validationObj: OrganizationRegistrationValidation =
         {} as OrganizationRegistrationValidation;
 
-      validationObj.emailAlreadyExists = !!(await OrganizationSchema.findOne({
+      validationObj.emailAlreadyExists = !!(await OrganizationModel.findOne({
         email: input.email,
       }));
-      validationObj.cpfCnpjAlreadyExists = !!(await OrganizationSchema.findOne({
+      validationObj.cpfCnpjAlreadyExists = !!(await OrganizationModel.findOne({
         cpfCnpj: input.cpfCnpj,
       }));
       validationObj.organizationNameAlreadyExists =
-        !!(await OrganizationSchema.findOne({
+        !!(await OrganizationModel.findOne({
           name: input.name,
         }));
 
@@ -49,7 +49,7 @@ class OrganizationRepository {
         return validationObj;
       }
 
-      validationObj.registrationSucceeded = !!(await OrganizationSchema.create({
+      validationObj.registrationSucceeded = !!(await OrganizationModel.create({
         ...input,
         _id: new ObjectId(),
       }));
@@ -62,7 +62,7 @@ class OrganizationRepository {
 
   public static async findAll(): Promise<Organization[]> {
     try {
-      return await OrganizationSchema.find();
+      return await OrganizationModel.find();
     } catch (err) {
       console.error(err);
     }

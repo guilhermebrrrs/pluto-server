@@ -1,7 +1,7 @@
 import { model, Model, Schema } from "mongoose";
 import { CollectionPoint } from "../types";
 
-const CollectionPointSchema: Model<CollectionPoint> = model(
+const CollectionPointModel: Model<CollectionPoint> = model(
   "CollectionPoint",
   new Schema(
     {
@@ -31,4 +31,4 @@ const CollectionPointSchema: Model<CollectionPoint> = model(
   "collection_points"
 );
 
-export default CollectionPointSchema;
+export default CollectionPointModel;

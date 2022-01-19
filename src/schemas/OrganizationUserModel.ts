@@ -1,8 +1,8 @@
 import { Model, model, Schema } from "mongoose";
-import { Organization } from "../types";
+import { OrganizationUser } from "../types";
 
-const OrganizationSchema: Model<Organization> = model(
-  "Organization",
+const OrganizationUserModel: Model<OrganizationUser> = model(
+  "OrganizationUser",
   new Schema(
     {
       _id: Schema.Types.ObjectId,
@@ -12,29 +12,29 @@ const OrganizationSchema: Model<Organization> = model(
           type: Schema.Types.ObjectId,
         },
       ],
-      cpfCnpj: String,
       email: {
         required: true,
         type: String,
-        unique: true,
       },
       isActive: {
-        default: true,
-        required: true,
+        default: false,
         type: Boolean,
+      },
+      organization: {
+        ref: "Organization",
+        type: Schema.Types.ObjectId,
       },
       name: {
         required: true,
         type: String,
       },
-      organizationType: String,
       password: {
         required: true,
         type: String,
       },
-      users: [
+      responsibleForCollectionPaths: [
         {
-          ref: "OrganizationUser",
+          ref: "CollectionPath",
           type: Schema.Types.ObjectId,
         },
       ],
@@ -43,7 +43,7 @@ const OrganizationSchema: Model<Organization> = model(
       timestamps: true,
     }
   ),
-  "organizations"
+  "organization_users"
 );
 
-export default OrganizationSchema;
+export default OrganizationUserModel;

@@ -1,30 +1,32 @@
-import { Address, CreateUserLocationInput, User, UserLocation } from "../types";
-import { AddressSchema, UserLocationSchema, UserSchema } from "../schemas";
+import { CreateUserLocationInput, User } from "../types";
+import { AddressModel, UserLocationModel, UserModel } from "../schemas";
 import { ObjectId } from "mongodb";
 
 class UserLocationRepository {
   public static async create(input: CreateUserLocationInput) {
     try {
-      console.log(input);
+      const user = await UserModel.findById(input.userId);
 
-      const user: User = await UserSchema.findById(input.userId);
+      if (!user) return false;
 
-      const userLocation = await UserLocationSchema.create({
+      const userLocation = await UserLocationModel.create({
         _id: new ObjectId(),
         user,
         availableDaysAndTimes: input.availableDaysAndTimes,
         placename: input.placename,
       });
 
-      const address = await AddressSchema.create({
+      const address = await AddressModel.create({
         _id: new ObjectId(),
         ...input.address,
       });
 
       if (address && userLocation) {
+        user.locations.push(userLocation);
         userLocation.address = address;
         address.userLocation = userLocation;
 
+        await user.save();
         await userLocation.save();
         await address.save();
 
@@ -42,19 +44,10 @@ class UserLocationRepository {
 
   public static async findAllByUserId(id: string) {
     try {
-      const user: User = await UserSchema.findById(id);
+      const user: User = await UserModel.findById(id);
 
       //TODO: fix problem: day of week isn't returning
-      return !!user
-        ? await UserLocationSchema.find()
-            .where({ user })
-            .populate("address")
-            .populate({
-              path: "availableDaysAndTimes",
-              populate: { path: "day", model: "UserLocation" },
-            })
-            .exec()
-        : [];
+      return !!user ? await UserLocationModel.find().where({ user }) : [];
     } catch (err) {
       console.error(err.message);
     }

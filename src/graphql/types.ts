@@ -139,7 +139,7 @@ export default gql`
   }
 
   type AvailableDayAndTime {
-    day: WeekDays
+    weekDay: WeekDays
     maxTime: AvailableTime
     minTime: AvailableTime
   }
@@ -179,7 +179,7 @@ export default gql`
     createdAt: String
     createdBy: User
     collectionPoint: CollectionPoint
-    collectedRequestMaterials: [CollectionRequestMaterial]
+    collectionRequestMaterials: [CollectionRequestMaterial]
     collectionStatus: CollectionStatus
     details: String
     locations: UserLocation

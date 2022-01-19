@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { OrganizationSchema, OrganizationUserSchema } from "../schemas";
+import { OrganizationModel, OrganizationUserModel } from "../schemas";
 import {
   AuthenticateOrganizationUserInput,
   CreateOrganizationUserInput,
@@ -14,11 +14,11 @@ class OrganizationUserRepository {
     input: AuthenticateOrganizationUserInput
   ): Promise<OrganizationUser> {
     try {
-      const organization = (await OrganizationSchema.findOne({
+      const organization = (await OrganizationModel.findOne({
         email: input.organizationEmail,
       })) as Organization;
 
-      return await OrganizationUserSchema.findOne({
+      return await OrganizationUserModel.findOne({
         organization: organization,
       });
     } catch (err) {
@@ -33,12 +33,13 @@ class OrganizationUserRepository {
       const validationObj: OrganizationUserRegistrationValidation =
         {} as OrganizationUserRegistrationValidation;
 
-      validationObj.emailAlreadyExists =
-        !!(await OrganizationUserSchema.findOne({ email: input.email }));
+      validationObj.emailAlreadyExists = !!(await OrganizationUserModel.findOne(
+        { email: input.email }
+      ));
       validationObj.organizationWithSameNameAlreadyExists =
-        !!(await OrganizationSchema.findOne({ name: input.username }));
+        !!(await OrganizationModel.findOne({ name: input.username }));
 
-      const organization = await OrganizationSchema.findOne({
+      const organization = await OrganizationModel.findOne({
         email: input.organizationEmail,
       });
 
@@ -63,7 +64,7 @@ class OrganizationUserRepository {
         password: input.password,
       };
 
-      const wasOrganizationUserCreated = !!(await OrganizationUserSchema.create(
+      const wasOrganizationUserCreated = !!(await OrganizationUserModel.create(
         organizationUser
       ));
 
@@ -85,7 +86,7 @@ class OrganizationUserRepository {
     input: UpdateOrganizationUserPersonalDataInput
   ) {
     try {
-      return !!(await OrganizationUserSchema.findOneAndUpdate(
+      return !!(await OrganizationUserModel.findOneAndUpdate(
         { _id: input._id },
         { ...input.data }
       ));
@@ -96,7 +97,7 @@ class OrganizationUserRepository {
 
   public static async findAll(): Promise<OrganizationUser[]> {
     try {
-      return await OrganizationUserSchema.find();
+      return await OrganizationUserModel.find();
     } catch (err) {
       console.error(err);
     }
@@ -104,7 +105,7 @@ class OrganizationUserRepository {
 
   public static async findAllByOrganizationId(id: string) {
     try {
-      return await OrganizationUserSchema.find()
+      return await OrganizationUserModel.find()
         .where("organization")
         .equals(id)
         .populate("organization")
@@ -116,7 +117,7 @@ class OrganizationUserRepository {
 
   public static async deleteById(id: string) {
     try {
-      return !!(await OrganizationUserSchema.deleteOne({ _id: id }));
+      return !!(await OrganizationUserModel.deleteOne({ _id: id }));
     } catch (err) {
       console.error(err.message);
     }

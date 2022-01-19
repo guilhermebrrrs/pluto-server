@@ -4,7 +4,7 @@ import {
   UpdateUserPasswordInput,
   User,
 } from "../types";
-import { UserSchema } from "../schemas";
+import { UserModel } from "../schemas";
 import { ObjectId } from "mongodb";
 
 class UserRepository {
@@ -12,7 +12,7 @@ class UserRepository {
     input: AuthenticateUserInput
   ): Promise<User> {
     try {
-      return await UserSchema.findOne(input);
+      return await UserModel.findOne(input);
     } catch (err) {
       console.error(err);
     }
@@ -20,7 +20,7 @@ class UserRepository {
 
   public static async create(input: CreateUserInput) {
     try {
-      return !!(await UserSchema.create({ ...input, _id: new ObjectId() }));
+      return !!(await UserModel.create({ ...input, _id: new ObjectId() }));
     } catch (err) {
       console.error(err);
     }
@@ -28,7 +28,7 @@ class UserRepository {
 
   public static async delete(id: string) {
     try {
-      await UserSchema.deleteOne({ _id: id });
+      await UserModel.deleteOne({ _id: id });
     } catch (err) {
       console.error(err);
     }
@@ -36,7 +36,7 @@ class UserRepository {
 
   public static async findAll() {
     try {
-      return await UserSchema.find();
+      return await UserModel.find();
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +44,7 @@ class UserRepository {
 
   public static async findById(id: string) {
     try {
-      return UserSchema.findOne({ _id: id });
+      return UserModel.findOne({ _id: id });
     } catch (err) {
       console.error(err);
     }
@@ -52,7 +52,7 @@ class UserRepository {
 
   public static async update(obj: User) {
     try {
-      await UserSchema.findOneAndUpdate({ _id: obj?._id }, obj);
+      await UserModel.findOneAndUpdate({ _id: obj?._id }, obj);
     } catch (err) {
       console.error(err);
     }
@@ -63,10 +63,8 @@ class UserRepository {
     newPassword,
     oldPassword,
   }: UpdateUserPasswordInput) {
-    console.log(email, newPassword, oldPassword);
-
     try {
-      await UserSchema.findOneAndUpdate(
+      await UserModel.findOneAndUpdate(
         {
           email: email,
           password: oldPassword,
