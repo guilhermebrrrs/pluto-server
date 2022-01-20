@@ -93,6 +93,14 @@ interface CollectionRequestMaterial extends DateMetadata {
   materialType?: MaterialType;
 }
 
+interface CreateOrganizationInput {
+  email: string;
+  cpfCnpj?: string;
+  name: string;
+  password: string;
+  organizationType: OrganizationType;
+}
+
 interface CreateOrganizationUserInput {
   email: string;
   username: string;
@@ -117,30 +125,12 @@ interface CreateUserLocationAddressInput {
   street: string;
 }
 
-interface CreateUserLocationAvailableDaysAndTimesInput {
-  weekDay: WeekDays;
-  maxTime: CreateUserLocationAvailableTimeInput;
-  minTime: CreateUserLocationAvailableTimeInput;
-}
-
-interface CreateUserLocationAvailableTimeInput {
-  hour: number;
-  minutes: number;
-}
-
 interface CreateUserLocationInput {
   userId: string;
   address: CreateUserLocationAddressInput;
-  availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput];
-  placename: String;
-}
-
-interface CreateOrganizationInput {
-  email: string;
-  cpfCnpj?: string;
-  name: string;
-  password: string;
-  organizationType: OrganizationType;
+  availableDaysAndTimes: [AvailableDayAndTime];
+  comments: string;
+  placename: string;
 }
 
 interface DateMetadata {
@@ -193,6 +183,26 @@ interface UpdateOrganizationUserPersonalDataInput {
   data: OrganizationUserPersonalDataInput;
 }
 
+interface UpdateUserLocationAddressInput {
+  _id: string;
+  cep: string;
+  city: string;
+  complement?: string;
+  country: string;
+  district: string;
+  number: string;
+  state: string;
+  street: string;
+}
+
+interface UpdateUserLocationInput {
+  userId: string;
+  address: UpdateUserLocationAddressInput;
+  availableDaysAndTimes: [AvailableDayAndTime];
+  comments: string;
+  placename: string;
+}
+
 interface UpdateUserPasswordInput {
   email: string;
   newPassword: string;
@@ -210,6 +220,7 @@ interface UserLocation extends DateMetadata {
   address?: Address;
   availableDaysAndTimes: AvailableDayAndTime[];
   collectionRequests?: CollectionRequest[];
+  comments?: string;
   latitude?: number;
   longitude?: number;
   placename?: string;
@@ -231,8 +242,6 @@ export type {
   CreateOrganizationUserInput,
   CreateUserInput,
   CreateUserLocationAddressInput,
-  CreateUserLocationAvailableDaysAndTimesInput,
-  CreateUserLocationAvailableTimeInput,
   CreateUserLocationInput,
   Organization,
   OrganizationRegistrationValidation,
@@ -240,6 +249,8 @@ export type {
   OrganizationUser,
   OrganizationUserPersonalDataInput,
   UpdateOrganizationUserPersonalDataInput,
+  UpdateUserLocationAddressInput,
+  UpdateUserLocationInput,
   UpdateUserPasswordInput,
   User,
   UserLocation,

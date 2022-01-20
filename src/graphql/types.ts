@@ -175,7 +175,7 @@ export default gql`
   type CollectionRequest {
     _id: ID
     acceptedBy: OrganizationUser
-    canceledOrCompletedBy: OrganizationUser
+    canceledOrCompletedBy: UserOrOrganizationUser
     createdAt: String
     createdBy: User
     collectionPoint: CollectionPoint
@@ -191,7 +191,7 @@ export default gql`
     _id: ID
     amount: Float
     collectionRequest: CollectionRequest
-    createAt: String
+    createdAt: String
     description: String
     materialType: MaterialType
     updatedAt: String
@@ -306,12 +306,15 @@ export default gql`
     _id: ID
     address: Address
     availableDaysAndTimes: [AvailableDayAndTime]
-    createdAt: String
     collectionRequests: [CollectionRequest]
+    comments: String
+    createdAt: String
     latitude: Float
     longitude: Float
     placename: String
     updatedAt: String
     user: User
   }
+
+  union UserOrOrganizationUser = User | OrganizationUser
 `;

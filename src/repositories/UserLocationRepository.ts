@@ -46,12 +46,22 @@ class UserLocationRepository {
     try {
       const user: User = await UserModel.findById(id);
 
-      //TODO: fix problem: day of week isn't returning
-      return !!user ? await UserLocationModel.find().where({ user }) : [];
+      return !!user
+        ? await UserLocationModel.find()
+            .where({ user })
+            .populate("address")
+            .populate({
+              path: "availableDaysAndTimes",
+              populate: { path: "day", model: "UserLocation" },
+            })
+            .exec()
+        : [];
     } catch (err) {
       console.error(err.message);
     }
   }
+
+  public static async updateUserLocation() {}
 }
 
 export { UserLocationRepository };
