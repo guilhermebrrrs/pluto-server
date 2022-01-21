@@ -55,6 +55,17 @@ export default gql`
     password: String!
   }
 
+  input AvailableDayAndTimeInput {
+    weekDay: WeekDays
+    maxTime: AvailableTimeInput
+    minTime: AvailableTimeInput
+  }
+
+  input AvailableTimeInput {
+    hour: Int
+    minutes: Int
+  }
+
   input CreateOrganizationInput {
     email: String!
     cpfCnpj: String
@@ -102,6 +113,7 @@ export default gql`
     userId: ID!
     address: CreateUserLocationAddressInput!
     availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput]!
+    comments: String
     placename: String!
   }
 
@@ -115,6 +127,26 @@ export default gql`
   input UpdateOrganizationUserPersonalDataInput {
     _id: String!
     data: OrganizationUserPersonalDataInput!
+  }
+
+  input UpdateUserLocationAddressInput {
+    _id: String!
+    cep: String!
+    city: String!
+    complement: String
+    country: String!
+    district: String!
+    number: String!
+    state: String!
+    street: String!
+  }
+
+  input UpdateUserLocationInput {
+    _id: String!
+    address: UpdateUserLocationAddressInput
+    availableDaysAndTimes: [AvailableDayAndTimeInput]
+    comments: String
+    placename: String!
   }
 
   input UpdateUserPasswordInput {
@@ -214,8 +246,14 @@ export default gql`
 
     deleteOrganizationUserById(id: ID): Boolean
 
+    deleteUserLocationById(id: ID!): Boolean
+
     updateOrganizationUserPersonalData(
       updateOrganizationUserPersonalDataInput: UpdateOrganizationUserPersonalDataInput
+    ): Boolean
+
+    updateUserLocation(
+      updateUserLocationInput: UpdateUserLocationInput
     ): Boolean
 
     updateUserPassword(updateUserPasswordInput: UpdateUserPasswordInput): String

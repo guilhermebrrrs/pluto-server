@@ -35,6 +35,17 @@ interface AuthenticateUserInput {
   password: string;
 }
 
+interface AvailableDayAndTimeInput {
+  weekDay: WeekDays;
+  maxTime: AvailableTimeInput;
+  minTime: AvailableTimeInput;
+}
+
+interface AvailableTimeInput {
+  hour: number;
+  minutes: number;
+}
+
 interface AvailableDayAndTime {
   weekDay: WeekDays;
   maxTime: AvailableTime;
@@ -125,10 +136,21 @@ interface CreateUserLocationAddressInput {
   street: string;
 }
 
+interface CreateUserLocationAvailableDaysAndTimesInput {
+  weekDay: WeekDays;
+  maxTime: CreateUserLocationAvailableTimeInput;
+  minTime: CreateUserLocationAvailableTimeInput;
+}
+
+interface CreateUserLocationAvailableTimeInput {
+  hour: number;
+  minutes: number;
+}
+
 interface CreateUserLocationInput {
   userId: string;
   address: CreateUserLocationAddressInput;
-  availableDaysAndTimes: [AvailableDayAndTime];
+  availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput];
   comments: string;
   placename: string;
 }
@@ -196,9 +218,9 @@ interface UpdateUserLocationAddressInput {
 }
 
 interface UpdateUserLocationInput {
-  userId: string;
+  _id: string;
   address: UpdateUserLocationAddressInput;
-  availableDaysAndTimes: [AvailableDayAndTime];
+  availableDaysAndTimes: [AvailableDayAndTimeInput];
   comments: string;
   placename: string;
 }
@@ -218,7 +240,7 @@ interface User extends BaseUser {
 interface UserLocation extends DateMetadata {
   _id?: ObjectId;
   address?: Address;
-  availableDaysAndTimes: AvailableDayAndTime[];
+  availableDaysAndTimes?: AvailableDayAndTime[];
   collectionRequests?: CollectionRequest[];
   comments?: string;
   latitude?: number;

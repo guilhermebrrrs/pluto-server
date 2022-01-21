@@ -13,6 +13,7 @@ import {
   CreateUserInput,
   CreateUserLocationInput,
   UpdateOrganizationUserPersonalDataInput,
+  UpdateUserLocationInput,
   UpdateUserPasswordInput,
 } from "../types";
 
@@ -41,6 +42,9 @@ export default {
     deleteOrganizationUserById: async (_: any, { id = "" as string }: any) =>
       await OrganizationUserRepository.deleteById(id),
 
+    deleteUserLocationById: async (_: any, { id = "" as string }: any) =>
+      await UserLocationRepository.deleteById(id),
+
     updateOrganizationUserPersonalData: async (
       _: any,
       {
@@ -50,6 +54,12 @@ export default {
       await OrganizationUserRepository.updatePersonalData(
         updateOrganizationUserPersonalDataInput
       ),
+
+    updateUserLocation: async (
+      _: any,
+      { updateUserLocationInput = {} as UpdateUserLocationInput }: any
+    ) =>
+      await UserLocationRepository.updateUserLocation(updateUserLocationInput),
 
     updateUserPassword: async (
       _: any,
