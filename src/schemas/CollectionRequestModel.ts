@@ -1,5 +1,5 @@
-import { Model, model, Schema } from "mongoose";
 import { CollectionRequest } from "../types";
+import { Model, model, Schema } from "mongoose";
 
 const CollectionRequestModel: Model<CollectionRequest> = model(
   "CollectionRequest",
@@ -27,7 +27,13 @@ const CollectionRequestModel: Model<CollectionRequest> = model(
         ref: "CollectionPoint",
         type: Schema.Types.ObjectId,
       },
-      collectionRequestMaterials: [String],
+      collectionRequestMaterials: [
+        {
+          ref: "CollectionRequestMaterial",
+          required: true,
+          type: Schema.Types.ObjectId,
+        },
+      ],
       collectionStatus: String,
       details: String,
       location: {

@@ -1,5 +1,5 @@
-import { model, Model, Schema } from "mongoose";
 import { CollectionPath } from "../types";
+import { model, Model, Schema } from "mongoose";
 
 const CollectionPathModel: Model<CollectionPath> = model(
   "CollectionPath",
@@ -8,14 +8,12 @@ const CollectionPathModel: Model<CollectionPath> = model(
       _id: Schema.Types.ObjectId,
       collectionPoints: [
         {
-          autopopulate: true,
           ref: "CollectionPoint",
           required: true,
           type: Schema.Types.ObjectId,
         },
       ],
       collectionPathResponsibleOrganizationUser: {
-        autopopulate: true,
         ref: "OrganizationUser",
         type: Schema.Types.ObjectId,
       },
