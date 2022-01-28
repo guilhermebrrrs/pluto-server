@@ -8,6 +8,7 @@ import {
   AuthenticateOrganizationInput,
   AuthenticateOrganizationUserInput,
   AuthenticateUserInput,
+  CreateCollectionRequestInput,
   CreateOrganizationInput,
   CreateOrganizationUserInput,
   CreateUserInput,
@@ -16,9 +17,15 @@ import {
   UpdateUserLocationInput,
   UpdateUserPasswordInput,
 } from "../types";
+import { CollectionRequestRepository } from "../repositories/CollectionRequestRepository";
 
 export default {
   Mutation: {
+    createCollectionRequest: async (
+      _: any,
+      { createCollectionRequest = {} as CreateCollectionRequestInput }: any
+    ) => await CollectionRequestRepository.create(createCollectionRequest),
+
     createOrganization: async (
       _: any,
       { createOrganizationInput = {} as CreateOrganizationInput }: any

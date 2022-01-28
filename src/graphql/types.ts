@@ -17,9 +17,11 @@ export default gql`
     METALS
     NON_RECYCLABLE
     ORGANIC_WASTE
+    OTHERS
     PAPERS
     PLASTICS
     RADIOACTIVE_MATERIALS
+    SEVERALS
     WOODS
   }
 
@@ -64,6 +66,19 @@ export default gql`
   input AvailableTimeInput {
     hour: Int
     minutes: Int
+  }
+
+  input CreateCollectionRequestInput {
+    collectionRequestMaterials: [CreateCollectionRequestMaterialInput]!
+    details: String
+    locationId: ID!
+    userId: ID!
+  }
+
+  input CreateCollectionRequestMaterialInput {
+    amount: Int
+    description: String
+    materialType: MaterialType!
   }
 
   input CreateOrganizationInput {
@@ -230,6 +245,10 @@ export default gql`
   }
 
   type Mutation {
+    createCollectionRequest(
+      createCollectionRequestInput: CreateCollectionRequestInput
+    ): Boolean
+
     createOrganization(
       createOrganizationInput: CreateOrganizationInput
     ): OrganizationRegistrationValidation
@@ -238,11 +257,11 @@ export default gql`
       createOrganizationUserInput: CreateOrganizationUserInput
     ): OrganizationUserRegistrationValidation
 
+    createUser(createUserInput: CreateUserInput): Boolean
+
     createUserLocation(
       createUserLocationInput: CreateUserLocationInput
     ): Boolean
-
-    createUser(createUserInput: CreateUserInput): Boolean
 
     deleteOrganizationUserById(id: ID): Boolean
 
