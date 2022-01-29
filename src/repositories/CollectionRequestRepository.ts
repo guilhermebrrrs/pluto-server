@@ -3,7 +3,11 @@ import {
   UserLocationModel,
   UserModel,
 } from "../schemas";
-import { CreateCollectionRequestInput } from "../types";
+import {
+  CollectionRequest,
+  CollectionRequestMaterial,
+  CreateCollectionRequestInput,
+} from "../types";
 import { ObjectId } from "mongodb";
 
 class CollectionRequestRepository {
@@ -17,7 +21,12 @@ class CollectionRequestRepository {
       if (!!user && !!userLocation) {
         const collectionRequest = await CollectionRequestModel.create({
           _id: new ObjectId(),
-          collectionRequestMaterials: input.collectionRequestMaterials,
+          collectionRequestMaterials: input.collectionRequestMaterials.map(
+            (item) => ({
+              ...(item as CollectionRequestMaterial),
+              _id: new ObjectId(),
+            })
+          ),
           createdBy: user,
           details: input.details,
           location: userLocation,
@@ -40,6 +49,18 @@ class CollectionRequestRepository {
       }
 
       return false;
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  public static async findAllByUserId(id: string) {
+    try {
+      const user = await UserModel.findOne({ _id: id });
+
+      return !!user
+        ? await CollectionRequestModel.find({ createdBy: user })
+        : ([] as CollectionRequest[]);
     } catch (err) {
       console.error(err.message);
     }

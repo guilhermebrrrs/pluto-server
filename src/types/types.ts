@@ -35,24 +35,24 @@ interface AuthenticateUserInput {
   password: string;
 }
 
-interface AvailableDayAndTimeInput {
-  weekDay: WeekDays;
-  maxTime: AvailableTimeInput;
-  minTime: AvailableTimeInput;
-}
-
-interface AvailableTimeInput {
-  hour: number;
-  minutes: number;
-}
-
 interface AvailableDayAndTime {
   weekDay: WeekDays;
   maxTime: AvailableTime;
   minTime: AvailableTime;
 }
 
+interface AvailableDayAndTimeInput {
+  weekDay: WeekDays;
+  maxTime: AvailableTimeInput;
+  minTime: AvailableTimeInput;
+}
+
 interface AvailableTime {
+  hour: number;
+  minutes: number;
+}
+
+interface AvailableTimeInput {
   hour: number;
   minutes: number;
 }
@@ -173,30 +173,20 @@ interface DateMetadata {
   updatedAt?: Date;
 }
 
-interface OrganizationRegistrationValidation {
-  cpfCnpjAlreadyExists: boolean;
-  emailAlreadyExists: boolean;
-  organizationNameAlreadyExists: boolean;
-  passwordConstraintDoesntMatch: boolean;
-  registrationSucceeded: boolean;
-}
-
-interface OrganizationUserRegistrationValidation {
-  emailAlreadyExists: boolean;
-  emailAndOrganizationAlreadyExists: boolean;
-  noOrganizationFound: boolean;
-  organizationNameAlreadyExists: boolean;
-  organizationWithSameNameAlreadyExists: boolean;
-  passwordConstraintDoesntMatch: boolean;
-  registrationSucceeded: boolean;
-}
-
 interface Organization extends BaseUser {
   _id?: ObjectId;
   collectionRequests?: CollectionRequest[];
   cpfCnpj?: string;
   organizationType: OrganizationType;
   users?: OrganizationUser[];
+}
+
+interface OrganizationRegistrationValidation {
+  cpfCnpjAlreadyExists: boolean;
+  emailAlreadyExists: boolean;
+  organizationNameAlreadyExists: boolean;
+  passwordConstraintDoesntMatch: boolean;
+  registrationSucceeded: boolean;
 }
 
 interface OrganizationUser extends BaseUser {
@@ -211,6 +201,16 @@ interface OrganizationUserPersonalDataInput {
   name: string;
   isActive: boolean;
   password: string;
+}
+
+interface OrganizationUserRegistrationValidation {
+  emailAlreadyExists: boolean;
+  emailAndOrganizationAlreadyExists: boolean;
+  noOrganizationFound: boolean;
+  organizationNameAlreadyExists: boolean;
+  organizationWithSameNameAlreadyExists: boolean;
+  passwordConstraintDoesntMatch: boolean;
+  registrationSucceeded: boolean;
 }
 
 interface UpdateOrganizationUserPersonalDataInput {
@@ -268,7 +268,9 @@ export type {
   AuthenticateOrganizationUserInput,
   AuthenticateUserInput,
   AvailableDayAndTime,
+  AvailableDayAndTimeInput,
   AvailableTime,
+  AvailableTimeInput,
   CollectionPath,
   CollectionPoint,
   CollectionRequest,
@@ -279,12 +281,14 @@ export type {
   CreateOrganizationUserInput,
   CreateUserInput,
   CreateUserLocationAddressInput,
+  CreateUserLocationAvailableDaysAndTimesInput,
+  CreateUserLocationAvailableTimeInput,
   CreateUserLocationInput,
   Organization,
   OrganizationRegistrationValidation,
-  OrganizationUserRegistrationValidation,
   OrganizationUser,
   OrganizationUserPersonalDataInput,
+  OrganizationUserRegistrationValidation,
   UpdateOrganizationUserPersonalDataInput,
   UpdateUserLocationAddressInput,
   UpdateUserLocationInput,

@@ -1,4 +1,5 @@
 import {
+  CollectionRequestRepository,
   OrganizationRepository,
   OrganizationUserRepository,
   UserLocationRepository,
@@ -17,14 +18,13 @@ import {
   UpdateUserLocationInput,
   UpdateUserPasswordInput,
 } from "../types";
-import { CollectionRequestRepository } from "../repositories/CollectionRequestRepository";
 
 export default {
   Mutation: {
     createCollectionRequest: async (
       _: any,
-      { createCollectionRequest = {} as CreateCollectionRequestInput }: any
-    ) => await CollectionRequestRepository.create(createCollectionRequest),
+      { createCollectionRequestInput = {} as CreateCollectionRequestInput }: any
+    ) => await CollectionRequestRepository.create(createCollectionRequestInput),
 
     createOrganization: async (
       _: any,
