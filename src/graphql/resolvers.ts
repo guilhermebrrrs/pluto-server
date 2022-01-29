@@ -98,8 +98,8 @@ export default {
       { authenticateUserInput = {} as AuthenticateUserInput }: any
     ) => await UserRepository.authenticate(authenticateUserInput),
 
-    findUserById: async (_: any, { id }: any) =>
-      await UserRepository.findById(id),
+    findAllCollectionRequestsByUserId: async (_: any, { id }: any) =>
+      await CollectionRequestRepository.findAllByUserId(id),
 
     findAllOrganizations: async () => await OrganizationRepository.findAll(),
 
@@ -113,5 +113,8 @@ export default {
       await UserLocationRepository.findAllByUserId(id),
 
     findAllUsers: async () => await UserRepository.findAll(),
+
+    findUserById: async (_: any, { id }: any) =>
+      await UserRepository.findById(id),
   },
 };

@@ -229,7 +229,7 @@ export default gql`
     collectionRequestMaterials: [CollectionRequestMaterial]
     collectionStatus: CollectionStatus
     details: String
-    locations: UserLocation
+    location: UserLocation
     organization: Organization
     updatedAt: String
   }
@@ -333,6 +333,8 @@ export default gql`
     authenticateOrganizationUser(
       authenticateOrganizationUserInput: AuthenticateOrganizationUserInput
     ): OrganizationUser
+
+    findAllCollectionRequestsByUserId(id: ID!): [CollectionRequest]
 
     findAllOrganizations: [Organization]
 
