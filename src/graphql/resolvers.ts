@@ -101,6 +101,15 @@ export default {
     findAllCollectionRequestsByUserId: async (_: any, { id }: any) =>
       await CollectionRequestRepository.findAllByUserId(id),
 
+    findAllCollectionRequestsByUserIdAndIsInStatusArray: async (
+      _: any,
+      { id, statusArray }: any
+    ) =>
+      await CollectionRequestRepository.findAllByUserIdAndIsInStatusArray(
+        id,
+        statusArray
+      ),
+
     findAllOrganizations: async () => await OrganizationRepository.findAll(),
 
     findAllOrganizationUsers: async () =>

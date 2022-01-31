@@ -104,6 +104,41 @@ class CollectionRequestRepository {
       console.error(err.message);
     }
   }
+
+  public static async findAllByUserIdAndIsInStatusArray(
+    id: string,
+    statusArray?: CollectionStatus[]
+  ) {
+    console.log(id, statusArray);
+
+    try {
+      const user = await UserModel.findOne({ _id: id });
+
+      return !!user
+        ? await CollectionRequestModel.find({
+            createdBy: user,
+            $and: [
+              {
+                collectionStatus: {
+                  $in: statusArray || Object.values(CollectionStatus),
+                },
+              },
+            ],
+          })
+            .populate("createdBy")
+            .populate({
+              path: "collectionRequestMaterials",
+              model: "CollectionRequestMaterial",
+            })
+            .populate({
+              path: "location",
+              populate: { path: "address", model: "Address" },
+            })
+        : ([] as CollectionRequest[]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
 }
 
 export { CollectionRequestRepository };

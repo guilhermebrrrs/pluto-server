@@ -336,6 +336,11 @@ export default gql`
 
     findAllCollectionRequestsByUserId(id: ID!): [CollectionRequest]
 
+    findAllCollectionRequestsByUserIdAndIsInStatusArray(
+      id: ID!
+      statusArray: [CollectionStatus]
+    ): [CollectionRequest]
+
     findAllOrganizations: [Organization]
 
     findAllOrganizationUsers: [OrganizationUser]
