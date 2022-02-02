@@ -11,6 +11,7 @@ import {
   CreateCollectionRequestInput,
 } from "../types";
 import { ObjectId } from "mongodb";
+import mongoose from "mongoose";
 
 class CollectionRequestRepository {
   public static async create(input: CreateCollectionRequestInput) {
@@ -20,65 +21,83 @@ class CollectionRequestRepository {
         _id: input.locationId,
       });
 
-      if (!!user && !!userLocation) {
-        const collectionRequestMaterialsArray =
-          [] as CollectionRequestMaterial[];
-
-        await (async () => {
-          input.collectionRequestMaterials.map(
-            async (item: CollectionRequestMaterial) => {
-              await CollectionRequestMaterialModel.create({
-                _id: new ObjectId(),
-                amount: item.amount,
-                description: item.description,
-                materialType: item.materialType,
-              }).then((collectionRequestMaterial) => {
-                if (!!collectionRequestMaterial) {
-                  collectionRequestMaterialsArray.push(
-                    collectionRequestMaterial
-                  );
-                  console.log("salvou");
-                } else {
-                  console.log("não salvou");
-                }
-              });
-            }
-          );
-        })().then(() => {
-          if (
-            collectionRequestMaterialsArray.length !==
-            input.collectionRequestMaterials.length
-          ) {
-            return false;
-          }
-        });
-
-        const collectionRequest = await CollectionRequestModel.create({
-          _id: new ObjectId(),
-          collectionRequestMaterials: [...collectionRequestMaterialsArray],
-          collectionStatus: CollectionStatus.OPENED,
-          createdBy: user,
-          details: input.details,
-          location: userLocation,
-        });
-
-        if (!!collectionRequest) {
-          user.collectionRequests.push(collectionRequest);
-          userLocation.collectionRequests.push(collectionRequest);
-
-          user.save();
-          userLocation.save();
-
-          return true;
-        }
-
-        user.delete();
-        userLocation.delete();
+      if (!user && !userLocation) {
+        console.error(
+          "User or User Location are not found. Was not possible to complete the operation!"
+        );
 
         return false;
       }
 
-      return false;
+      const collectionRequest = await CollectionRequestModel.create({
+        _id: new ObjectId(),
+        collectionStatus: CollectionStatus.OPENED,
+        createdBy: user,
+        details: input.details,
+        location: userLocation,
+      });
+
+      if (!collectionRequest) {
+        console.error(
+          "Collection Request could not be created. Was not possible to complete the operation! "
+        );
+
+        return false;
+      }
+
+      const collectionRequestMaterialsArray = [] as CollectionRequestMaterial[];
+
+      await Promise.all(
+        input.collectionRequestMaterials.map(
+          async (item: CollectionRequestMaterial) => {
+            await CollectionRequestMaterialModel.create({
+              _id: new ObjectId(),
+              amount: item.amount,
+              description: item.description,
+              materialType: item.materialType,
+            }).then(
+              (collectionRequestMaterial) =>
+                !!collectionRequestMaterial &&
+                collectionRequestMaterialsArray.push(collectionRequestMaterial)
+            );
+          }
+        )
+      );
+
+      if (
+        collectionRequestMaterialsArray.length !==
+        input.collectionRequestMaterials.length
+      ) {
+        await Promise.all(
+          collectionRequestMaterialsArray.map(
+            async (item) => await (item as mongoose.Document).delete()
+          )
+        );
+
+        console.error(
+          "Could not save materials. Was not possible to complete the operation!"
+        );
+
+        return false;
+      }
+
+      await Promise.all(
+        collectionRequestMaterialsArray.map(async (item) => {
+          item.collectionRequest = collectionRequest;
+          await (item as mongoose.Document).save();
+        })
+      );
+
+      collectionRequest.collectionRequestMaterials =
+        collectionRequestMaterialsArray;
+      user.collectionRequests.push(collectionRequest);
+      userLocation.collectionRequests.push(collectionRequest);
+
+      await collectionRequest.save();
+      await user.save();
+      await userLocation.save();
+
+      return true;
     } catch (err) {
       console.error(err.message);
     }
@@ -109,8 +128,6 @@ class CollectionRequestRepository {
     id: string,
     statusArray?: CollectionStatus[]
   ) {
-    console.log(id, statusArray);
-
     try {
       const user = await UserModel.findOne({ _id: id });
 

@@ -4,7 +4,6 @@ import { MongoDBService } from "./services";
 import { loadEnvironmentVariables } from "./utils";
 
 const init = async () => {
-  //TODO: remove mongodb-autopopulate from dependencies
   loadEnvironmentVariables();
   await MongoDBService.connect();
 
