@@ -1,14 +1,16 @@
 import {
-  CollectionRequestRepository,
-  OrganizationRepository,
-  OrganizationUserRepository,
-  UserLocationRepository,
-  UserRepository,
-} from "../repositories";
+  CollectionPathService,
+  CollectionRequestService,
+  OrganizationService,
+  OrganizationUserService,
+  UserLocationService,
+  UserService,
+} from "../services";
 import {
   AuthenticateOrganizationInput,
   AuthenticateOrganizationUserInput,
   AuthenticateUserInput,
+  CreateCollectionPathInput,
   CreateCollectionRequestInput,
   CreateOrganizationInput,
   CreateOrganizationUserInput,
@@ -21,36 +23,41 @@ import {
 
 export default {
   Mutation: {
+    createCollectionPath: async (
+      _: any,
+      { createCollectionPathInput = {} as CreateCollectionPathInput }: any
+    ) => await CollectionPathService.create(createCollectionPathInput),
+
     createCollectionRequest: async (
       _: any,
       { createCollectionRequestInput = {} as CreateCollectionRequestInput }: any
-    ) => await CollectionRequestRepository.create(createCollectionRequestInput),
+    ) => await CollectionRequestService.create(createCollectionRequestInput),
 
     createOrganization: async (
       _: any,
       { createOrganizationInput = {} as CreateOrganizationInput }: any
-    ) => await OrganizationRepository.create(createOrganizationInput),
+    ) => await OrganizationService.create(createOrganizationInput),
 
     createOrganizationUser: async (
       _: any,
       { createOrganizationUserInput = {} as CreateOrganizationUserInput }: any
-    ) => await OrganizationUserRepository.create(createOrganizationUserInput),
+    ) => await OrganizationUserService.create(createOrganizationUserInput),
 
     createUser: async (
       _: any,
       { createUserInput = {} as CreateUserInput }: any
-    ) => await UserRepository.create(createUserInput),
+    ) => await UserService.create(createUserInput),
 
     createUserLocation: async (
       _: any,
       { createUserLocationInput = {} as CreateUserLocationInput }: any
-    ) => await UserLocationRepository.create(createUserLocationInput),
+    ) => await UserLocationService.create(createUserLocationInput),
 
     deleteOrganizationUserById: async (_: any, { id = "" as string }: any) =>
-      await OrganizationUserRepository.deleteById(id),
+      await OrganizationUserService.deleteById(id),
 
     deleteUserLocationById: async (_: any, { id = "" as string }: any) =>
-      await UserLocationRepository.deleteById(id),
+      await UserLocationService.deleteById(id),
 
     updateOrganizationUserPersonalData: async (
       _: any,
@@ -58,20 +65,19 @@ export default {
         updateOrganizationUserPersonalDataInput = {} as UpdateOrganizationUserPersonalDataInput,
       }: any
     ) =>
-      await OrganizationUserRepository.updatePersonalData(
+      await OrganizationUserService.updatePersonalData(
         updateOrganizationUserPersonalDataInput
       ),
 
     updateUserLocation: async (
       _: any,
       { updateUserLocationInput = {} as UpdateUserLocationInput }: any
-    ) =>
-      await UserLocationRepository.updateUserLocation(updateUserLocationInput),
+    ) => await UserLocationService.updateUserLocation(updateUserLocationInput),
 
     updateUserPassword: async (
       _: any,
       { updateUserPasswordInput = {} as UpdateUserPasswordInput }: any
-    ) => await UserRepository.updatePassword(updateUserPasswordInput),
+    ) => await UserService.updatePassword(updateUserPasswordInput),
   },
 
   Query: {
@@ -80,8 +86,7 @@ export default {
       {
         authenticateOrganizationInput = {} as AuthenticateOrganizationInput,
       }: any
-    ) =>
-      await OrganizationRepository.authenticate(authenticateOrganizationInput),
+    ) => await OrganizationService.authenticate(authenticateOrganizationInput),
 
     authenticateOrganizationUser: async (
       _: any,
@@ -89,41 +94,40 @@ export default {
         authenticateOrganizationUserInput = {} as AuthenticateOrganizationUserInput,
       }: any
     ) =>
-      await OrganizationUserRepository.authenticate(
+      await OrganizationUserService.authenticate(
         authenticateOrganizationUserInput
       ),
 
     authenticateUser: async (
       _: any,
       { authenticateUserInput = {} as AuthenticateUserInput }: any
-    ) => await UserRepository.authenticate(authenticateUserInput),
+    ) => await UserService.authenticate(authenticateUserInput),
 
     findAllCollectionRequestsByUserId: async (_: any, { id }: any) =>
-      await CollectionRequestRepository.findAllByUserId(id),
+      await CollectionRequestService.findAllByUserId(id),
 
     findAllCollectionRequestsByUserIdAndIsInStatusArray: async (
       _: any,
       { id, statusArray }: any
     ) =>
-      await CollectionRequestRepository.findAllByUserIdAndIsInStatusArray(
+      await CollectionRequestService.findAllByUserIdAndIsInStatusArray(
         id,
         statusArray
       ),
 
-    findAllOrganizations: async () => await OrganizationRepository.findAll(),
+    findAllOrganizations: async () => await OrganizationService.findAll(),
 
     findAllOrganizationUsers: async () =>
-      await OrganizationUserRepository.findAll(),
+      await OrganizationUserService.findAll(),
 
     findAllOrganizationUsersByOrganizationId: async (_: any, { id }: any) =>
-      await OrganizationUserRepository.findAllByOrganizationId(id),
+      await OrganizationUserService.findAllByOrganizationId(id),
 
     findAllUserLocationsByUserId: async (_: any, { id }: any) =>
-      await UserLocationRepository.findAllByUserId(id),
+      await UserLocationService.findAllByUserId(id),
 
-    findAllUsers: async () => await UserRepository.findAll(),
+    findAllUsers: async () => await UserService.findAll(),
 
-    findUserById: async (_: any, { id }: any) =>
-      await UserRepository.findById(id),
+    findUserById: async (_: any, { id }: any) => await UserService.findById(id),
   },
 };

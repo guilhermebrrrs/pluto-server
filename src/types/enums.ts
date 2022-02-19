@@ -1,3 +1,10 @@
+enum CollectionPathStatus {
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED",
+  IN_DEFINITION = "IN_DEFINITION",
+  READY = "READY",
+}
+
 enum CollectionStatus {
   ACCEPTED = "ACCEPTED",
   CANCELED = "CANCELED",
@@ -38,4 +45,10 @@ enum WeekDays {
   SATURDAY = "SATURDAY",
 }
 
-export { CollectionStatus, MaterialType, OrganizationType, WeekDays };
+export {
+  CollectionPathStatus,
+  CollectionStatus,
+  MaterialType,
+  OrganizationType,
+  WeekDays,
+};

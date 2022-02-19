@@ -13,7 +13,7 @@ import {
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
-class CollectionRequestRepository {
+class CollectionRequestService {
   public static async create(input: CreateCollectionRequestInput) {
     try {
       const user = await UserModel.findOne({ _id: input.userId });
@@ -158,4 +158,4 @@ class CollectionRequestRepository {
   }
 }
 
-export { CollectionRequestRepository };
+export { CollectionRequestService };

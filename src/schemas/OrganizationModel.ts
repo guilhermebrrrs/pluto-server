@@ -12,6 +12,12 @@ const OrganizationModel: Model<Organization> = model(
           type: Schema.Types.ObjectId,
         },
       ],
+      collectionPaths: [
+        {
+          ref: "CollectionPath",
+          type: Schema.Types.ObjectId,
+        },
+      ],
       cpfCnpj: String,
       email: {
         required: true,

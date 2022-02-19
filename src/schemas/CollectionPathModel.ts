@@ -17,12 +17,19 @@ const CollectionPathModel: Model<CollectionPath> = model(
         ref: "OrganizationUser",
         type: Schema.Types.ObjectId,
       },
-      collectionPathStatus: String,
+      collectionPathStatus: {
+        required: true,
+        type: String,
+      },
       description: String,
       estimatedTimeInMinutes: Number,
       name: {
         required: true,
         type: String,
+      },
+      organization: {
+        ref: "Organization",
+        type: Schema.Types.ObjectId,
       },
       totalEstimatedDistance: Number,
     },

@@ -7,16 +7,20 @@ const CollectionRequestModel: Model<CollectionRequest> = model(
     {
       _id: Schema.Types.ObjectId,
       acceptedBy: {
-        ref: "OrganizationUser",
-        type: Schema.Types.ObjectId,
-      },
-      canceledOrCompletedBy: {
-        type: Schema.Types.ObjectId,
         refPath: {
-          enum: ["OrganizationUser", "User"],
+          enum: ["Organization", "OrganizationUser"],
           required: true,
           type: String,
         },
+        type: Schema.Types.ObjectId,
+      },
+      canceledOrCompletedBy: {
+        refPath: {
+          enum: ["Organization", "OrganizationUser", "User"],
+          required: true,
+          type: String,
+        },
+        type: Schema.Types.ObjectId,
       },
       createdBy: {
         ref: "User",

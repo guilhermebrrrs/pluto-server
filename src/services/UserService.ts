@@ -7,7 +7,7 @@ import {
 import { UserModel } from "../schemas";
 import { ObjectId } from "mongodb";
 
-class UserRepository {
+class UserService {
   public static async authenticate(
     input: AuthenticateUserInput
   ): Promise<User> {
@@ -77,4 +77,4 @@ class UserRepository {
   }
 }
 
-export { UserRepository };
+export { UserService };

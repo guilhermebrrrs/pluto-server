@@ -1,6 +1,13 @@
 import { gql } from "apollo-server";
 
 export default gql`
+  enum CollectionPathStatus {
+    COMPLETED
+    CANCELED
+    IN_DEFINITION
+    READY
+  }
+
   enum CollectionStatus {
     ACCEPTED
     CANCELED
@@ -66,6 +73,12 @@ export default gql`
   input AvailableTimeInput {
     hour: Int
     minutes: Int
+  }
+
+  input CreateCollectionPathInput {
+    description: String
+    name: String!
+    organizationId: ID!
   }
 
   input CreateCollectionRequestInput {
@@ -200,7 +213,7 @@ export default gql`
     _id: ID
     collectionPoints: [CollectionPoint]
     collectionPathResponsibleOrganizationUser: OrganizationUser
-    collectionPathStatus: CollectionStatus
+    collectionPathStatus: CollectionPathStatus
     createdAt: String
     description: String
     estimatedTimeInMinutes: Int
@@ -215,14 +228,15 @@ export default gql`
     collectionRequest: CollectionRequest
     createdAt: String
     destination: CollectionPoint
+    location: UserLocation
     origin: CollectionPoint
     updatedAt: String
   }
 
   type CollectionRequest {
     _id: ID
-    acceptedBy: OrganizationUser
-    canceledOrCompletedBy: UserOrOrganizationUser
+    acceptedBy: TypesOrganizationOrOrganizationUserOrUser
+    canceledOrCompletedBy: TypesOrganizationUserOrUser
     createdAt: String
     createdBy: User
     collectionPoint: CollectionPoint
@@ -245,6 +259,10 @@ export default gql`
   }
 
   type Mutation {
+    createCollectionPath(
+      createCollectionPathInput: CreateCollectionPathInput
+    ): Boolean
+
     createCollectionRequest(
       createCollectionRequestInput: CreateCollectionRequestInput
     ): Boolean
@@ -380,5 +398,10 @@ export default gql`
     user: User
   }
 
-  union UserOrOrganizationUser = User | OrganizationUser
+  union TypesOrganizationUserOrUser = OrganizationUser | User
+
+  union TypesOrganizationOrOrganizationUserOrUser =
+      Organization
+    | OrganizationUser
+    | User
 `;

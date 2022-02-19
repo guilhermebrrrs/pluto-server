@@ -7,7 +7,7 @@ import {
   OrganizationRegistrationValidation,
 } from "../types";
 
-class OrganizationRepository {
+class OrganizationService {
   public static async authenticate(
     input: AuthenticateOrganizationInput
   ): Promise<Organization> {
@@ -69,4 +69,4 @@ class OrganizationRepository {
   }
 }
 
-export { OrganizationRepository };
+export { OrganizationService };

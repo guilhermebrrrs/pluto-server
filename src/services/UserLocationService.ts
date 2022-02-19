@@ -6,7 +6,7 @@ import {
 import { AddressModel, UserLocationModel, UserModel } from "../schemas";
 import { ObjectId } from "mongodb";
 
-class UserLocationRepository {
+class UserLocationService {
   public static async create(input: CreateUserLocationInput) {
     try {
       const user = await UserModel.findById(input.userId);
@@ -107,4 +107,4 @@ class UserLocationRepository {
   }
 }
 
-export { UserLocationRepository };
+export { UserLocationService };

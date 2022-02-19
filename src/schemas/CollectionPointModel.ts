@@ -8,6 +8,7 @@ const CollectionPointModel: Model<CollectionPoint> = model(
       _id: Schema.Types.ObjectId,
       collectionPath: {
         ref: "CollectionPath",
+        required: true,
         type: Schema.Types.ObjectId,
       },
       collectionRequest: {

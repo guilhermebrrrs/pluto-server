@@ -9,7 +9,7 @@ import {
   UpdateOrganizationUserPersonalDataInput,
 } from "../types";
 
-class OrganizationUserRepository {
+class OrganizationUserService {
   public static async authenticate(
     input: AuthenticateOrganizationUserInput
   ): Promise<OrganizationUser> {
@@ -124,4 +124,4 @@ class OrganizationUserRepository {
   }
 }
 
-export { OrganizationUserRepository };
+export { OrganizationUserService };
