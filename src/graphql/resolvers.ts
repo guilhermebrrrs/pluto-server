@@ -1,6 +1,7 @@
 import {
   CollectionPathService,
   CollectionRequestService,
+  GraphHopperGeocodingLocationService,
   OrganizationService,
   OrganizationUserService,
   UserLocationService,
@@ -53,10 +54,10 @@ export default {
       { createUserLocationInput = {} as CreateUserLocationInput }: any
     ) => await UserLocationService.create(createUserLocationInput),
 
-    deleteOrganizationUserById: async (_: any, { id = "" as string }: any) =>
+    deleteOrganizationUserById: async (_: any, { id }: any) =>
       await OrganizationUserService.deleteById(id),
 
-    deleteUserLocationById: async (_: any, { id = "" as string }: any) =>
+    deleteUserLocationById: async (_: any, { id }: any) =>
       await UserLocationService.deleteById(id),
 
     updateOrganizationUserPersonalData: async (
@@ -127,6 +128,9 @@ export default {
       await UserLocationService.findAllByUserId(id),
 
     findAllUsers: async () => await UserService.findAll(),
+
+    findGeocodingLocation: async (_: any, { typedLocation }: any) =>
+      GraphHopperGeocodingLocationService.findGeocodingLocation(typedLocation),
 
     findUserById: async (_: any, { id }: any) => await UserService.findById(id),
   },

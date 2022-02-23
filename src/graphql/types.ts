@@ -258,6 +258,30 @@ export default gql`
     updatedAt: String
   }
 
+  type GraphHopperGeocodingRequestSchema {
+    hits: [GraphHopperGeocodingLocation]
+    took: Int
+  }
+
+  type GraphHopperGeocodingLocation {
+    city: String
+    country: String
+    houseNumber: String
+    name: String
+    osm_id: String
+    osm_key: String
+    osm_type: String
+    point: GraphHopperGeocodingPoint
+    postcode: String
+    state: String
+    street: String
+  }
+
+  type GraphHopperGeocodingPoint {
+    lat: Float
+    lng: Float
+  }
+
   type Mutation {
     createCollectionPath(
       createCollectionPathInput: CreateCollectionPathInput
@@ -368,6 +392,10 @@ export default gql`
     findAllUserLocationsByUserId(id: ID!): [UserLocation]
 
     findAllUsers: [User]
+
+    findGeocodingLocation(
+      typedLocation: String
+    ): GraphHopperGeocodingRequestSchema
 
     findUserById(id: ID!): User
   }

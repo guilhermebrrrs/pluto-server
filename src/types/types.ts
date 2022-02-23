@@ -182,6 +182,30 @@ interface DateMetadata {
   updatedAt?: Date;
 }
 
+interface GraphHopperGeocodingRequestSchema {
+  hits?: GraphHopperGeocodingLocation[];
+  took?: number;
+}
+
+interface GraphHopperGeocodingLocation {
+  city?: string;
+  country?: string;
+  houseNumber?: string;
+  name?: string;
+  osm_id?: string;
+  osm_key?: string;
+  osm_type?: string;
+  point?: GraphHopperGeocodingPoint;
+  postcode?: string;
+  state?: string;
+  street?: string;
+}
+
+interface GraphHopperGeocodingPoint {
+  lat?: number;
+  lng?: number;
+}
+
 interface Organization extends BaseUser {
   _id?: ObjectId;
   collectionRequests?: CollectionRequest[];
@@ -295,6 +319,9 @@ export type {
   CreateUserLocationAvailableDaysAndTimesInput,
   CreateUserLocationAvailableTimeInput,
   CreateUserLocationInput,
+  GraphHopperGeocodingLocation,
+  GraphHopperGeocodingPoint,
+  GraphHopperGeocodingRequestSchema,
   Organization,
   OrganizationRegistrationValidation,
   OrganizationUser,

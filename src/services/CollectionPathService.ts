@@ -1,12 +1,14 @@
 import { CollectionPathModel, OrganizationModel } from "../schemas";
-import { CollectionPathStatus, CreateCollectionPathInput } from "../types";
+import {
+  CollectionPath,
+  CollectionPathStatus,
+  CreateCollectionPathInput,
+} from "../types";
 import { ObjectId } from "mongodb";
 
 class CollectionPathService {
   public static async create(input: CreateCollectionPathInput) {
     try {
-      console.log(input);
-
       const organization = await OrganizationModel.findById(
         input.organizationId
       );
@@ -26,8 +28,25 @@ class CollectionPathService {
       organization.collectionPaths.push(collectionPath);
       await organization.save();
 
-      console.log("deu bom");
       return true;
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  public static async findByOrganizationAndCollectionPathStatus(
+    organizationId: string,
+    collectionPathStatus: CollectionPathStatus
+  ) {
+    try {
+      const organization = await OrganizationModel.findById(organizationId);
+
+      return !!organization
+        ? await CollectionPathModel.find({
+            collectionPathStatus: collectionPathStatus,
+            organization,
+          })
+        : ([] as CollectionPath[]);
     } catch (err) {
       console.error(err.message);
     }
