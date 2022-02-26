@@ -1,7 +1,7 @@
 import {
   CollectionPathService,
   CollectionRequestService,
-  GraphHopperGeocodingLocationService,
+  HereMapsGeocodingLocationService,
   OrganizationService,
   OrganizationUserService,
   UserLocationService,
@@ -130,7 +130,9 @@ export default {
     findAllUsers: async () => await UserService.findAll(),
 
     findGeocodingLocation: async (_: any, { typedLocation }: any) =>
-      GraphHopperGeocodingLocationService.findGeocodingLocation(typedLocation),
+      await HereMapsGeocodingLocationService.findGeocodingLocation(
+        typedLocation
+      ),
 
     findUserById: async (_: any, { id }: any) => await UserService.findById(id),
   },

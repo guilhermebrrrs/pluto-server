@@ -258,7 +258,7 @@ export default gql`
     updatedAt: String
   }
 
-  type GraphHopperGeocodingRequestSchema {
+  type GraphHopperGeocodingResponseSchema {
     hits: [GraphHopperGeocodingLocation]
     took: Int
   }
@@ -280,6 +280,59 @@ export default gql`
   type GraphHopperGeocodingPoint {
     lat: Float
     lng: Float
+  }
+
+  type HereMapsGeocodingAddress {
+    label: String
+    countryCode: String
+    countryName: String
+    stateCode: String
+    state: String
+    county: String
+    city: String
+    district: String
+    street: String
+    postalCode: String
+    houseNumber: String
+  }
+
+  type HereMapsGeocodingFieldScore {
+    city: Int
+    streets: [Int]
+    houseNumber: Int
+  }
+
+  type HereMapsGeocodingLocation {
+    id: String
+    access: [HereMapsGeocodingPosition]
+    address: HereMapsGeocodingAddress
+    houseNumberType: String
+    mapView: HereMapsGeocodingMapView
+    position: HereMapsGeocodingPosition
+    resultType: String
+    scoring: HereMapsGeocodingScoring
+    title: String
+  }
+
+  type HereMapsGeocodingMapView {
+    west: Float
+    south: Float
+    east: Float
+    north: Float
+  }
+
+  type HereMapsGeocodingPosition {
+    lat: Float
+    lng: Float
+  }
+
+  type HereMapsGeocodingResponseSchema {
+    items: [HereMapsGeocodingLocation]
+  }
+
+  type HereMapsGeocodingScoring {
+    queryScore: Int
+    fieldScore: HereMapsGeocodingFieldScore
   }
 
   type Mutation {
@@ -395,7 +448,7 @@ export default gql`
 
     findGeocodingLocation(
       typedLocation: String
-    ): GraphHopperGeocodingRequestSchema
+    ): HereMapsGeocodingResponseSchema
 
     findUserById(id: ID!): User
   }

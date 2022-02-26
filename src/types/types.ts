@@ -182,7 +182,7 @@ interface DateMetadata {
   updatedAt?: Date;
 }
 
-interface GraphHopperGeocodingRequestSchema {
+interface GraphHopperGeocodingResponseSchema {
   hits?: GraphHopperGeocodingLocation[];
   took?: number;
 }
@@ -204,6 +204,59 @@ interface GraphHopperGeocodingLocation {
 interface GraphHopperGeocodingPoint {
   lat?: number;
   lng?: number;
+}
+
+interface HereMapsGeocodingAddress {
+  label?: string;
+  countryCode?: string;
+  countryName?: string;
+  stateCode?: string;
+  state?: string;
+  county?: string;
+  city?: string;
+  district?: string;
+  street?: string;
+  postalCode?: string;
+  houseNumber?: string;
+}
+
+interface HereMapsGeocodingFieldScore {
+  city?: number;
+  streets?: number[];
+  houseNumber?: number;
+}
+
+interface HereMapsGeocodingLocation {
+  title?: string;
+  id?: string;
+  resultType?: string;
+  houseNumberType?: string;
+  address?: HereMapsGeocodingAddress;
+  position?: HereMapsGeocodingPosition;
+  access?: HereMapsGeocodingPosition[];
+  mapView?: HereMapsGeocodingMapView;
+  scoring?: HereMapsGeocodingScoring;
+}
+
+interface HereMapsGeocodingMapView {
+  west?: number;
+  south?: number;
+  east?: number;
+  north?: number;
+}
+
+interface HereMapsGeocodingPosition {
+  lat?: number;
+  lng?: number;
+}
+
+interface HereMapsGeocodingResponseSchema {
+  items?: HereMapsGeocodingLocation[];
+}
+
+interface HereMapsGeocodingScoring {
+  queryScore?: number;
+  fieldScore?: HereMapsGeocodingFieldScore;
 }
 
 interface Organization extends BaseUser {
@@ -321,7 +374,14 @@ export type {
   CreateUserLocationInput,
   GraphHopperGeocodingLocation,
   GraphHopperGeocodingPoint,
-  GraphHopperGeocodingRequestSchema,
+  GraphHopperGeocodingResponseSchema,
+  HereMapsGeocodingAddress,
+  HereMapsGeocodingFieldScore,
+  HereMapsGeocodingLocation,
+  HereMapsGeocodingMapView,
+  HereMapsGeocodingPosition,
+  HereMapsGeocodingResponseSchema,
+  HereMapsGeocodingScoring,
   Organization,
   OrganizationRegistrationValidation,
   OrganizationUser,

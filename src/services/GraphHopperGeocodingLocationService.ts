@@ -1,4 +1,4 @@
-import { GraphHopperGeocodingRequestSchema } from "../types";
+import { GraphHopperGeocodingResponseSchema } from "../types";
 import axios from "axios";
 
 class GraphHopperGeocodingLocationService {
@@ -8,7 +8,7 @@ class GraphHopperGeocodingLocationService {
 
       return (await axios
         .get(url)
-        .then((res) => res?.data)) as GraphHopperGeocodingRequestSchema;
+        .then((res) => res?.data)) as GraphHopperGeocodingResponseSchema;
     } catch (err) {
       console.error(err.message);
     }
