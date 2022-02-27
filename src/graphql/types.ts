@@ -143,6 +143,8 @@ export default gql`
     availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput]!
     comments: String
     placename: String!
+    latitude: Float!
+    longitude: Float!
   }
 
   input OrganizationUserPersonalDataInput {
@@ -235,8 +237,8 @@ export default gql`
 
   type CollectionRequest {
     _id: ID
-    acceptedBy: TypesOrganizationOrOrganizationUserOrUser
-    canceledOrCompletedBy: TypesOrganizationUserOrUser
+    acceptedBy: TypesOrganizationOrOrganizationUser
+    canceledOrCompletedBy: TypesOrganizationOrOrganizationUserOrUser
     createdAt: String
     createdBy: User
     collectionPoint: CollectionPoint
@@ -357,6 +359,8 @@ export default gql`
     createUserLocation(
       createUserLocationInput: CreateUserLocationInput
     ): Boolean
+
+    deleteCollectionRequestById(id: ID!): Boolean
 
     deleteOrganizationUserById(id: ID): Boolean
 
@@ -479,7 +483,7 @@ export default gql`
     user: User
   }
 
-  union TypesOrganizationUserOrUser = OrganizationUser | User
+  union TypesOrganizationOrOrganizationUser = OrganizationUser | Organization
 
   union TypesOrganizationOrOrganizationUserOrUser =
       Organization

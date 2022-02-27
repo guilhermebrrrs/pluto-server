@@ -54,6 +54,9 @@ export default {
       { createUserLocationInput = {} as CreateUserLocationInput }: any
     ) => await UserLocationService.create(createUserLocationInput),
 
+    deleteCollectionRequestById: async (_: any, { id }: any) =>
+      await CollectionRequestService.cancelById(id),
+
     deleteOrganizationUserById: async (_: any, { id }: any) =>
       await OrganizationUserService.deleteById(id),
 

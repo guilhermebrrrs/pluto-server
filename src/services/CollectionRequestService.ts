@@ -14,6 +14,22 @@ import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 class CollectionRequestService {
+  public static async cancelById(id: string) {
+    try {
+      const collectionRequest = await CollectionRequestModel.findOne({
+        _id: id,
+      });
+
+      if (!collectionRequest) new Error("CollectionRequest not found!");
+
+      collectionRequest.collectionStatus = CollectionStatus.CANCELED;
+
+      await collectionRequest.save();
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   public static async create(input: CreateCollectionRequestInput) {
     try {
       const user = await UserModel.findOne({ _id: input.userId });

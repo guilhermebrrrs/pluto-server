@@ -1,10 +1,12 @@
 import {
+  CollectionStatus,
   CreateUserLocationInput,
   UpdateUserLocationInput,
   User,
 } from "../types";
 import { AddressModel, UserLocationModel, UserModel } from "../schemas";
 import { ObjectId } from "mongodb";
+import { CollectionRequestService } from "./CollectionRequestService";
 
 class UserLocationService {
   public static async create(input: CreateUserLocationInput) {
@@ -18,11 +20,15 @@ class UserLocationService {
         user,
         availableDaysAndTimes: input.availableDaysAndTimes,
         placename: input.placename,
+        latitude: input.latitude,
+        longitude: input.longitude,
       });
 
       const address = await AddressModel.create({
         _id: new ObjectId(),
         ...input.address,
+      }).catch((err) => {
+        throw new Error(err.message);
       });
 
       if (address && userLocation) {
@@ -59,8 +65,24 @@ class UserLocationService {
 
         user.save();
 
-        await AddressModel.findOneAndDelete({ _id: userLocation.address._id });
-        await UserLocationModel.findOneAndDelete({ _id: userLocation._id });
+        await AddressModel.findOneAndDelete({
+          _id: userLocation.address._id,
+        }).catch((err) => {
+          throw new Error(err.message);
+        });
+        await UserLocationModel.findOneAndDelete({
+          _id: userLocation._id,
+        }).catch((err) => {
+          throw new Error(err.message);
+        });
+        await Promise.all(
+          userLocation.collectionRequests.map(async (item) => {
+            item.collectionStatus = CollectionStatus.CANCELED;
+            await CollectionRequestService.cancelById(item?._id?.toString());
+          })
+        ).catch((err) => {
+          throw new Error(err.message);
+        });
 
         return true;
       }
@@ -100,7 +122,9 @@ class UserLocationService {
           comments: input.comments,
           placename: input.placename,
         }
-      ));
+      ).catch((err) => {
+        throw new Error(err.message);
+      }));
     } catch (err) {
       console.error(err.message);
     }

@@ -175,6 +175,8 @@ interface CreateUserLocationInput {
   availableDaysAndTimes: [CreateUserLocationAvailableDaysAndTimesInput];
   comments: string;
   placename: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface DateMetadata {
