@@ -107,6 +107,15 @@ export default {
       { authenticateUserInput = {} as AuthenticateUserInput }: any
     ) => await UserService.authenticate(authenticateUserInput),
 
+    findAllCollectionPathsByOrganizationIdAndCollectionPathStatus: async (
+      _: any,
+      { organizationId, collectionPathStatus }: any
+    ) =>
+      await CollectionPathService.findAllByOrganizationIdAndCollectionPathStatus(
+        organizationId,
+        collectionPathStatus
+      ),
+
     findAllCollectionRequestsByUserId: async (_: any, { id }: any) =>
       await CollectionRequestService.findAllByUserId(id),
 
@@ -118,6 +127,11 @@ export default {
         id,
         statusArray
       ),
+
+    findAllCollectionRequestsInStatusArray: async (
+      _: any,
+      { statusArray }: any
+    ) => await CollectionRequestService.findAllInStatusArray(statusArray),
 
     findAllOrganizations: async () => await OrganizationService.findAll(),
 

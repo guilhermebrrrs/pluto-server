@@ -59,30 +59,20 @@ class UserLocationService {
 
       if (userLocation) {
         user.locations.filter(
-          (location) =>
-            (location._id as unknown as string) !== (userLocation._id as string)
+          (location) => location._id.toString !== userLocation._id.toString()
         );
 
-        user.save();
+        userLocation.user = undefined;
 
-        await AddressModel.findOneAndDelete({
-          _id: userLocation.address._id,
-        }).catch((err) => {
-          throw new Error(err.message);
-        });
-        await UserLocationModel.findOneAndDelete({
-          _id: userLocation._id,
-        }).catch((err) => {
-          throw new Error(err.message);
-        });
+        await user.save();
+        await userLocation.save();
+
         await Promise.all(
           userLocation.collectionRequests.map(async (item) => {
             item.collectionStatus = CollectionStatus.CANCELED;
             await CollectionRequestService.cancelById(item?._id?.toString());
           })
-        ).catch((err) => {
-          throw new Error(err.message);
-        });
+        );
 
         return true;
       }
@@ -122,9 +112,7 @@ class UserLocationService {
           comments: input.comments,
           placename: input.placename,
         }
-      ).catch((err) => {
-        throw new Error(err.message);
-      }));
+      ));
     } catch (err) {
       console.error(err.message);
     }

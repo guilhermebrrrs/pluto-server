@@ -433,10 +433,19 @@ export default gql`
       authenticateOrganizationUserInput: AuthenticateOrganizationUserInput
     ): OrganizationUser
 
+    findAllCollectionPathsByOrganizationIdAndCollectionPathStatus(
+      organizationId: ID!
+      collectionPathStatus: CollectionPathStatus
+    ): [CollectionPath]
+
     findAllCollectionRequestsByUserId(id: ID!): [CollectionRequest]
 
     findAllCollectionRequestsByUserIdAndIsInStatusArray(
       id: ID!
+      statusArray: [CollectionStatus]
+    ): [CollectionRequest]
+
+    findAllCollectionRequestsInStatusArray(
       statusArray: [CollectionStatus]
     ): [CollectionRequest]
 

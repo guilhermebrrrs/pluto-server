@@ -140,6 +140,27 @@ class CollectionRequestService {
     }
   }
 
+  public static async findAllInStatusArray(statusArray?: CollectionStatus[]) {
+    try {
+      return await CollectionRequestModel.find({
+        collectionStatus: {
+          $in: statusArray || Object.values(CollectionStatus),
+        },
+      })
+        .populate("createdBy")
+        .populate({
+          path: "collectionRequestMaterials",
+          model: "CollectionRequestMaterial",
+        })
+        .populate({
+          path: "location",
+          populate: { path: "address", model: "Address" },
+        });
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   public static async findAllByUserIdAndIsInStatusArray(
     id: string,
     statusArray?: CollectionStatus[]
@@ -170,6 +191,16 @@ class CollectionRequestService {
         : ([] as CollectionRequest[]);
     } catch (err) {
       console.error(err.message);
+    }
+  }
+
+  public static async findById(id: string) {
+    try {
+      return await CollectionRequestModel.findOne({
+        _id: id,
+      });
+    } catch (err) {
+      console.log(err.message);
     }
   }
 }

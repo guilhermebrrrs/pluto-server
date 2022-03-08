@@ -34,18 +34,44 @@ class CollectionPathService {
     }
   }
 
-  public static async findByOrganizationAndCollectionPathStatus(
+  public static async findAllByOrganizationIdAndCollectionPathStatus(
     organizationId: string,
     collectionPathStatus: CollectionPathStatus
   ) {
     try {
       const organization = await OrganizationModel.findById(organizationId);
 
+      console.log(organization);
+
       return !!organization
         ? await CollectionPathModel.find({
             collectionPathStatus: collectionPathStatus,
             organization,
           })
+            .populate({
+              path: "collectionPoints",
+              populate: [
+                {
+                  path: "destination",
+                  populate: {
+                    path: "location",
+                    populate: { path: "address", model: "Address" },
+                  },
+                },
+                {
+                  path: "location",
+                  populate: { path: "address", model: "Address" },
+                },
+                {
+                  path: "origin",
+                  populate: {
+                    path: "location",
+                    populate: { path: "address", model: "Address" },
+                  },
+                },
+              ],
+            })
+            .populate("collectionPathResponsibleOrganizationUser")
         : ([] as CollectionPath[]);
     } catch (err) {
       console.error(err.message);
