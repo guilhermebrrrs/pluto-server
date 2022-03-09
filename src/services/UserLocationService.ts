@@ -59,7 +59,7 @@ class UserLocationService {
 
       if (userLocation) {
         user.locations.filter(
-          (location) => location._id.toString !== userLocation._id.toString()
+          (location) => location._id.toString() !== userLocation._id.toString()
         );
 
         userLocation.user = undefined;
